@@ -6,6 +6,7 @@ using UnityEngine;
 public class EnemyProperties : MonoBehaviour
 {
     public int hitsLeft = 5;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,7 +31,7 @@ public class EnemyProperties : MonoBehaviour
 
         if (hitsLeft <= 0)
         {
-            Destroy(gameObject);
+            Destroy(transform.parent.gameObject);
         }
     }
 }
