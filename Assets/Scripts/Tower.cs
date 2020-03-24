@@ -6,20 +6,26 @@ using UnityEngine;
 public class Tower : MonoBehaviour
 {
     [SerializeField] Transform objectToPan;
-    [SerializeField] Transform targetEnemy;
     [SerializeField] float attackRange = 29f;
 
+    EnemyProperties[] targetEnemies = new EnemyProperties[0];
     ParticleSystem particles;
+    EnemySpawner enemies;
+    EnemyProperties closestEnemy;
+    
 
     private void Start()
     {
         particles = GetComponentInChildren<ParticleSystem>();
+        enemies = FindObjectOfType<EnemySpawner>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if ((targetEnemy) && (Vector3.Distance(objectToPan.position, targetEnemy.position) < attackRange))
+        float enemyDistance = FindTarget();
+
+        if ((targetEnemies.Length > 0) && (enemyDistance < attackRange))
         {
             LookAtEnemy();
             ShootEnemy(true);
@@ -30,9 +36,37 @@ public class Tower : MonoBehaviour
         }
     }
 
+    private float FindTarget()
+    {
+        float shortestDistance = 100f;
+        targetEnemies = enemies.getEnemies();
+        foreach (EnemyProperties enemy in targetEnemies)
+        {
+            shortestDistance = FindClosestEnemy(shortestDistance, enemy);
+        }
+
+        return shortestDistance;
+    }
+
+    private float FindClosestEnemy(float shortestDistance, EnemyProperties enemy)
+    {
+        float newDistance = Vector3.Distance(gameObject.transform.position, enemy.transform.position);
+        if (closestEnemy)
+        {
+            shortestDistance = Vector3.Distance(gameObject.transform.position, closestEnemy.transform.position);
+        }
+        if (newDistance < shortestDistance)
+        {
+            shortestDistance = newDistance;
+            closestEnemy = enemy;
+        }
+
+        return shortestDistance;
+    }
+
     private void LookAtEnemy()
     {
-            objectToPan.LookAt(targetEnemy);      
+            objectToPan.LookAt(closestEnemy.transform);      
     }
 
     private void ShootEnemy(bool inRange)

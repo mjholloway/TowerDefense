@@ -10,13 +10,7 @@ public class EnemyProperties : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        AddBoxCollider();
-    }
-
-    private void AddBoxCollider()
-    {
-        Collider collider = gameObject.AddComponent<BoxCollider>();
-        collider.isTrigger = false;
+        
     }
 
     // Update is called once per frame
