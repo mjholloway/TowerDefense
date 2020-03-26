@@ -24,9 +24,8 @@ public class EnemyMover : MonoBehaviour
     {
         foreach (Waypoint waypoint in path)
         {
-            yield return new WaitForSeconds(1f);
             transform.position = waypoint.transform.position;
-
+            yield return new WaitForSeconds(1f);
         }
     }
 

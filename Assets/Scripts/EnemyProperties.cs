@@ -7,6 +7,9 @@ public class EnemyProperties : MonoBehaviour
 {
     public int hitsLeft = 5;
 
+    [SerializeField] ParticleSystem hitParticles;
+    [SerializeField] ParticleSystem deathParticlePrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,11 +24,14 @@ public class EnemyProperties : MonoBehaviour
 
     private void OnParticleCollision(GameObject other)
     {
+        hitParticles.Play();
         hitsLeft--;
 
         if (hitsLeft <= 0)
         {
-            Destroy(transform.parent.gameObject);
+            ParticleSystem deathFx = Instantiate(deathParticlePrefab, transform.position, Quaternion.identity);
+            deathFx.Play();
+            Destroy(gameObject);
         }
     }
 }

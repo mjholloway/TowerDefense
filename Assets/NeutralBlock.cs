@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NeutralBlock : MonoBehaviour
 {
-    [SerializeField] GameObject tower;
+    [SerializeField] Tower tower;
     [SerializeField] bool hasTower = false;
 
     TowersEmpty parent;
@@ -35,7 +35,7 @@ public class NeutralBlock : MonoBehaviour
     private void CreateTower()
     {
         Vector3 towerPos = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 10f, gameObject.transform.position.z);
-        GameObject newTower = Instantiate(tower, towerPos, Quaternion.identity);
+        Tower newTower = Instantiate(tower, towerPos, Quaternion.identity);
         newTower.transform.parent = parent.transform;
         hasTower = true;
     }
