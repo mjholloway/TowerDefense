@@ -25,7 +25,7 @@ public class Tower : MonoBehaviour
     {
         float enemyDistance = FindTarget();
 
-        if ((targetEnemies.Length > 0) && (enemyDistance < attackRange))
+        if ((closestEnemy) && (enemyDistance < attackRange))
         {
             LookAtEnemy();
             ShootEnemy(true);
@@ -50,15 +50,18 @@ public class Tower : MonoBehaviour
 
     private float FindClosestEnemy(float shortestDistance, EnemyProperties enemy)
     {
-        float newDistance = Vector3.Distance(gameObject.transform.position, enemy.transform.position);
-        if (closestEnemy)
+        if (enemy)
         {
-            shortestDistance = Vector3.Distance(gameObject.transform.position, closestEnemy.transform.position);
-        }
-        if (newDistance < shortestDistance)
-        {
-            shortestDistance = newDistance;
-            closestEnemy = enemy;
+            float newDistance = Vector3.Distance(gameObject.transform.position, enemy.transform.position);
+            if (closestEnemy)
+            {
+                shortestDistance = Vector3.Distance(gameObject.transform.position, closestEnemy.transform.position);
+            }
+            if (newDistance < shortestDistance)
+            {
+                shortestDistance = newDistance;
+                closestEnemy = enemy;
+            }
         }
 
         return shortestDistance;
