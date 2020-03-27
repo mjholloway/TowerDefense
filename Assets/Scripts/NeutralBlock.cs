@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class NeutralBlock : MonoBehaviour
 {
-    [SerializeField] Tower tower;
     [SerializeField] bool hasTower = false;
-
-    TowersEmpty parent;
 
     // Start is called before the first frame update
     void Start()
     {
-        parent = FindObjectOfType<TowersEmpty>();
+
     }
 
     // Update is called once per frame
@@ -27,16 +24,9 @@ public class NeutralBlock : MonoBehaviour
         {
             if (!hasTower)
             {
-                CreateTower();
+                FindObjectOfType<TowerFactory>().AddTower(this);
+                hasTower = true;
             }
         }
-    }
-
-    private void CreateTower()
-    {
-        Vector3 towerPos = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 10f, gameObject.transform.position.z);
-        Tower newTower = Instantiate(tower, towerPos, Quaternion.identity);
-        newTower.transform.parent = parent.transform;
-        hasTower = true;
     }
 }
