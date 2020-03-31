@@ -63,6 +63,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06c3d05c4080ab944a11960359d22684, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveDelay: 0.5
+  goalParticles: {fileID: 198537984209914932, guid: 2e86bda354127c547953f154b041d302,
+    type: 3}
 --- !u!114 &729962151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19019,6 +19022,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4208721479801298, guid: dcf9cd10c07cf0c49863969befadb243, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198098995208406150, guid: dcf9cd10c07cf0c49863969befadb243,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198997797312625902, guid: dcf9cd10c07cf0c49863969befadb243,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198554004130006392, guid: dcf9cd10c07cf0c49863969befadb243,
+        type: 3}
+      propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

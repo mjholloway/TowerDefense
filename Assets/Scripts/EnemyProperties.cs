@@ -27,11 +27,17 @@ public class EnemyProperties : MonoBehaviour
         hitParticles.Play();
         hitsLeft--;
 
-        if (hitsLeft <= 0)
+        if (hitsLeft == 0)
         {
-            ParticleSystem deathFx = Instantiate(deathParticlePrefab, transform.position, Quaternion.identity);
-            deathFx.Play();
-            Destroy(gameObject);
+            ProcessEnemyDeath();
         }
+    }
+
+    public void ProcessEnemyDeath()
+    {
+        ParticleSystem deathFx = Instantiate(deathParticlePrefab, transform.position, Quaternion.identity);
+        deathFx.Play();
+        Destroy(deathFx.gameObject, deathFx.main.duration);
+        Destroy(gameObject);
     }
 }

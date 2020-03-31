@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NeutralBlock : MonoBehaviour
 {
-    [SerializeField] bool hasTower = false;
+    public bool hasTower = false;
 
     // Start is called before the first frame update
     void Start()

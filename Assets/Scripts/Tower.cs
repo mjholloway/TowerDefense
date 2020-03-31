@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Tower : MonoBehaviour
 {
+    public NeutralBlock baseBlock;
+
     [SerializeField] Transform objectToPan;
     [SerializeField] float attackRange = 29f;
 
@@ -13,7 +15,6 @@ public class Tower : MonoBehaviour
     EnemySpawner enemies;
     EnemyProperties closestEnemy;
     
-
     private void Start()
     {
         particles = GetComponentInChildren<ParticleSystem>();
