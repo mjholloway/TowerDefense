@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] float secondsBetweenSpawn = 5f;
     [SerializeField] GameObject enemyPrefab;
+    [SerializeField] Text enemyText;
 
     EnemyProperties[] enemies = new EnemyProperties[0];
     int enemyCount = 0;
@@ -14,6 +16,7 @@ public class EnemySpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        enemyText.text = "0";
         enemies = FindObjectsOfType<EnemyProperties>();
         enemyCount = enemies.Length;
         StartCoroutine(SpawnEnemy());
@@ -39,5 +42,6 @@ public class EnemySpawner : MonoBehaviour
     void Update()
     {
         enemies = FindObjectsOfType<EnemyProperties>();
+        enemyText.text = enemyCount.ToString();
     }
 }
