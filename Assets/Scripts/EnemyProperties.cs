@@ -9,6 +9,8 @@ public class EnemyProperties : MonoBehaviour
 
     [SerializeField] ParticleSystem hitParticles;
     [SerializeField] ParticleSystem deathParticlePrefab;
+    [SerializeField] AudioClip hitSfx;
+    [SerializeField] AudioClip deathSoundFx;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +28,7 @@ public class EnemyProperties : MonoBehaviour
     {
         hitParticles.Play();
         hitsLeft--;
+        GetComponent<AudioSource>().PlayOneShot(hitSfx);
 
         if (hitsLeft == 0)
         {
@@ -35,6 +38,7 @@ public class EnemyProperties : MonoBehaviour
 
     public void ProcessEnemyDeath()
     {
+        AudioSource.PlayClipAtPoint(deathSoundFx, new Vector3(23.5f, 80f, -64.1f));
         ParticleSystem deathFx = Instantiate(deathParticlePrefab, transform.position, Quaternion.identity);
         deathFx.Play();
         Destroy(deathFx.gameObject, deathFx.main.duration);

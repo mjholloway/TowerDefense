@@ -9,6 +9,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] float secondsBetweenSpawn = 5f;
     [SerializeField] GameObject enemyPrefab;
     [SerializeField] Text enemyText;
+    [SerializeField] AudioClip spawnEnemySfx;
 
     EnemyProperties[] enemies = new EnemyProperties[0];
     int enemyCount = 0;
@@ -27,6 +28,7 @@ public class EnemySpawner : MonoBehaviour
         while (enemyCount < 10)
         {
             yield return new WaitForSeconds(secondsBetweenSpawn);
+            GetComponent<AudioSource>().PlayOneShot(spawnEnemySfx);
             var newEnemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
             newEnemy.transform.parent = gameObject.transform;
             enemyCount++;

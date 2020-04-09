@@ -7,6 +7,7 @@ public class EnemyMover : MonoBehaviour
 {
     [SerializeField] float moveDelay = .5f;
     [SerializeField] ParticleSystem goalParticles;
+    [SerializeField] AudioClip reachedGoalSfx;
 
     // Start is called before the first frame update
     void Start()
@@ -29,17 +30,21 @@ public class EnemyMover : MonoBehaviour
             transform.position = waypoint.transform.position;
             yield return new WaitForSeconds(moveDelay);
         }
-        SelfDestruct();
+        ProcessReachingGoal();
     }
 
-    public void SelfDestruct()
+    public void ProcessReachingGoal()
+    {
+        AudioSource.PlayClipAtPoint(reachedGoalSfx, new Vector3(23.5f, 80f, -64.1f));
+        FindObjectOfType<PlayerHealth>().health--;
+        SelfDestruct();    
+    }
+
+    private void SelfDestruct()
     {
         ParticleSystem goalFx = Instantiate(goalParticles, transform.position, Quaternion.identity);
         goalFx.Play();
         Destroy(goalFx.gameObject, goalFx.main.duration);
         Destroy(gameObject);
-
-        FindObjectOfType<PlayerHealth>().health--;
     }
-
 }
