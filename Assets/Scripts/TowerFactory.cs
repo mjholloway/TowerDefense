@@ -8,22 +8,19 @@ public class TowerFactory : MonoBehaviour
     [SerializeField] int towerLimit = 5;
 
     TowersEmpty parent;
-    Queue<Tower> towers = new Queue<Tower>();
+    PlayerHealth player;
 
     private void Start()
     {
         parent = FindObjectOfType<TowersEmpty>();
+        player = GetComponentInChildren<PlayerHealth>();
     }
 
     public void AddTower(NeutralBlock block)
     {
-        if (towers.Count < towerLimit)
+        if (player.money >= 100)
         {
             InstantiateNewTower(block);
-        }
-        else
-        {
-            ReplaceOldestTower(block);
         }
     }
 
@@ -32,17 +29,17 @@ public class TowerFactory : MonoBehaviour
         Vector3 towerPos = new Vector3(block.transform.position.x, block.transform.position.y + 10f, block.transform.position.z);
         Tower newTower = Instantiate(towerPrefab, towerPos, Quaternion.identity);
         newTower.transform.parent = parent.transform;
-        towers.Enqueue(newTower);
         newTower.baseBlock = block;
+        player.money -= 100;
     }
 
-    private void ReplaceOldestTower(NeutralBlock block)
-    {
-        Tower newTower = towers.Dequeue();
-        newTower.baseBlock.hasTower = false;
-        Vector3 towerPos = new Vector3(block.transform.position.x, block.transform.position.y + 10f, block.transform.position.z);
-        newTower.transform.position = towerPos;
-        towers.Enqueue(newTower);
-        newTower.baseBlock = block;
-    }
+    //private void ReplaceOldestTower(NeutralBlock block)
+    //{
+    //    Tower newTower = towers.Dequeue();
+    //    newTower.baseBlock.hasTower = false;
+    //    Vector3 towerPos = new Vector3(block.transform.position.x, block.transform.position.y + 10f, block.transform.position.z);
+    //    newTower.transform.position = towerPos;
+    //    towers.Enqueue(newTower);
+    //    newTower.baseBlock = block;
+    //}
 }

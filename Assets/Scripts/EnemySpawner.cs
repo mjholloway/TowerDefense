@@ -6,44 +6,39 @@ using UnityEngine.UI;
 
 public class EnemySpawner : MonoBehaviour
 {
+    public int deadEnemies = 0;
+    public int enemyMax = 10;
+
     [SerializeField] float secondsBetweenSpawn = 5f;
     [SerializeField] GameObject enemyPrefab;
-    [SerializeField] Text enemyText;
     [SerializeField] AudioClip spawnEnemySfx;
+    [SerializeField] float moveDelay = .5f;
 
-    EnemyProperties[] enemies = new EnemyProperties[0];
+    List<EnemyProperties> enemies = new List<EnemyProperties>();
     int enemyCount = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        enemyText.text = "0";
-        enemies = FindObjectsOfType<EnemyProperties>();
-        enemyCount = enemies.Length;
         StartCoroutine(SpawnEnemy());
     }
 
     private IEnumerator SpawnEnemy()
     {        
-        while (enemyCount < 10)
+        while (enemyCount < enemyMax)
         {
             yield return new WaitForSeconds(secondsBetweenSpawn);
             GetComponent<AudioSource>().PlayOneShot(spawnEnemySfx);
             var newEnemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
+            enemies.Add(newEnemy.GetComponent<EnemyProperties>());
             newEnemy.transform.parent = gameObject.transform;
             enemyCount++;
+            
         }
     }
 
-    public EnemyProperties[] getEnemies()
+    public List<EnemyProperties> getEnemies()
     {
         return enemies;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        enemies = FindObjectsOfType<EnemyProperties>();
-        enemyText.text = enemyCount.ToString();
     }
 }

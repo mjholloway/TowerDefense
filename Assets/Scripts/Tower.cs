@@ -1,19 +1,28 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
+public enum shotOptions
+{
+    First = 0,
+    Closest = 1,
+    Last = 2
+}
 public class Tower : MonoBehaviour
 {
     public NeutralBlock baseBlock;
 
     [SerializeField] Transform objectToPan;
     [SerializeField] float attackRange = 29f;
+    [SerializeField] shotOptions shotMode = 0;
 
-    EnemyProperties[] targetEnemies = new EnemyProperties[0];
+    List<EnemyProperties> enemyList = new List<EnemyProperties>();
     ParticleSystem particles;
     EnemySpawner enemies;
-    EnemyProperties closestEnemy;
+    EnemyProperties targetEnemy;
+    float targetDistance = 100f;    
     
     private void Start()
     {
@@ -24,9 +33,9 @@ public class Tower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float enemyDistance = FindTarget();
+        FindTargetDistance();
 
-        if ((closestEnemy) && (enemyDistance < attackRange))
+        if ((targetEnemy) && (targetDistance < attackRange))
         {
             LookAtEnemy();
             ShootEnemy(true);
@@ -36,41 +45,65 @@ public class Tower : MonoBehaviour
             ShootEnemy(false);
         }
     }
-
-    private float FindTarget()
+    
+    private void FindTargetDistance()
     {
-        float shortestDistance = 100f;
-        targetEnemies = enemies.getEnemies();
-        foreach (EnemyProperties enemy in targetEnemies)
-        {
-            shortestDistance = FindClosestEnemy(shortestDistance, enemy);
-        }
-
-        return shortestDistance;
+        enemyList = enemies.getEnemies();
+        DetermineTarget();
     }
 
-    private float FindClosestEnemy(float shortestDistance, EnemyProperties enemy)
+    private void DetermineTarget()
     {
-        if (enemy)
+        foreach (EnemyProperties enemy in enemyList)
         {
-            float newDistance = Vector3.Distance(gameObject.transform.position, enemy.transform.position);
-            if (closestEnemy)
+            if (targetEnemy) { targetDistance = Vector3.Distance(targetEnemy.transform.position, gameObject.transform.position); } // set target distance every frame
+            float newDistance = Vector3.Distance(enemy.transform.position, gameObject.transform.position);
+            if (newDistance > attackRange) { continue; } // don't bother checking enemy if enemy is outside of attack range
+            switch (shotMode)
             {
-                shortestDistance = Vector3.Distance(gameObject.transform.position, closestEnemy.transform.position);
-            }
-            if (newDistance < shortestDistance)
-            {
-                shortestDistance = newDistance;
-                closestEnemy = enemy;
+                case shotOptions.First:
+                    FindFirstEnemy(newDistance, enemy);
+                    continue;
+                case shotOptions.Closest:
+                    FindClosestEnemy(newDistance, enemy);
+                    continue;
+                case shotOptions.Last:
+                    FindLastEnemy(newDistance, enemy);
+                    continue;
             }
         }
+    }
 
-        return shortestDistance;
+    private void FindFirstEnemy(float newDistance, EnemyProperties enemy)
+    {
+        if (!targetEnemy || enemy.waypointIndex < targetEnemy.waypointIndex)
+        {
+            targetEnemy = enemy;
+            targetDistance = newDistance;
+        }
+    }
+
+    private void FindClosestEnemy(float newDistance, EnemyProperties enemy)
+    {
+        if (!targetEnemy || newDistance < targetDistance)
+        {
+            targetEnemy = enemy;
+            targetDistance = newDistance;
+        }
+    }
+
+    private void FindLastEnemy(float newDistance, EnemyProperties enemy)
+    {
+        if (!targetEnemy || targetDistance > attackRange || enemy.waypointIndex > targetEnemy.waypointIndex)
+        {
+            targetEnemy = enemy;
+            targetDistance = newDistance;
+        }
     }
 
     private void LookAtEnemy()
     {
-            objectToPan.LookAt(closestEnemy.transform);      
+            objectToPan.LookAt(targetEnemy.transform);      
     }
 
     private void ShootEnemy(bool inRange)
