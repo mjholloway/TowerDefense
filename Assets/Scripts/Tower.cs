@@ -13,17 +13,17 @@ public enum shotOptions
 public class Tower : MonoBehaviour
 {
     public NeutralBlock baseBlock;
+    public shotOptions shotMode = 0;
 
     [SerializeField] Transform objectToPan;
     [SerializeField] float attackRange = 29f;
-    [SerializeField] shotOptions shotMode = 0;
 
     List<EnemyProperties> enemyList = new List<EnemyProperties>();
     ParticleSystem particles;
     EnemySpawner enemies;
     EnemyProperties targetEnemy;
-    float targetDistance = 100f;    
-    
+    float targetDistance = 100f;
+
     private void Start()
     {
         particles = GetComponentInChildren<ParticleSystem>();
@@ -110,6 +110,11 @@ public class Tower : MonoBehaviour
     {
         var emissionModule = particles.emission;
         emissionModule.enabled = inRange;
+    }
+
+    private void OnMouseDown()
+    {
+        PanelManager.ActivatePanel(this);
     }
 
 }

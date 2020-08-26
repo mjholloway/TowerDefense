@@ -24,7 +24,15 @@ public class NewEnemyMover : MonoBehaviour
             foreach (EnemyProperties enemy in enemies.getEnemies().ToList())
             {
                 enemy.waypointIndex++;
-                enemy.SetCurrentLocation();
+                try
+                {
+                    enemy.SetCurrentLocation();
+                } 
+                catch
+                {
+                    print("oops");
+                }
+                
             }
             yield return new WaitForSeconds(moveDelay);
         }
