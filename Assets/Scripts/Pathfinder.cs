@@ -11,7 +11,7 @@ public class Pathfinder : MonoBehaviour
     Queue<Waypoint> queue = new Queue<Waypoint>();
     bool isRunning = true;
     Waypoint searchCenter;
-    List<Waypoint> path = new List<Waypoint>();
+    public static List<Waypoint> path = new List<Waypoint>();
 
     Vector2Int[] directions =
     {
@@ -21,16 +21,23 @@ public class Pathfinder : MonoBehaviour
         Vector2Int.left
     };
 
-    public List<Waypoint> GetPath()
+    private void Start()
     {
-        if (path.Count == 0)
-        {
-            LoadBlocks();
-            BreadthFirstSearch();
-            CreatePath();
-        }
-        return path;
+        LoadBlocks();
+        BreadthFirstSearch();
+        CreatePath();
     }
+
+    //public List<Waypoint> GetPath()
+    //{
+    //    if (path.Count == 0)
+    //    {
+    //        LoadBlocks();
+    //        BreadthFirstSearch();
+    //        CreatePath();
+    //    }
+    //    return path;
+    //}
 
     private void CreatePath()
     {
@@ -105,11 +112,5 @@ public class Pathfinder : MonoBehaviour
             queue.Enqueue(neighbor);
             neighbor.exploredFrom = searchCenter;
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

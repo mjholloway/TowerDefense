@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -15,10 +16,12 @@ public class PanelManager : MonoBehaviour
     public Tower currentTower;
 
     bool hasBeenActivated = false;
+    TMP_Dropdown dropdown;
 
     private void Start()
     {
         gameObject.SetActive(false);
+        dropdown = GetComponentInChildren<TMP_Dropdown>();
     }
 
     private void Update()
@@ -41,11 +44,13 @@ public class PanelManager : MonoBehaviour
                     if (hit.transform.gameObject.GetComponent<Tower>() == null)
                     {
                         gameObject.SetActive(false);
+                        panel.currentTower.rangeIndicator.gameObject.SetActive(false);
                     }
                 }
                 else
                 {
                     gameObject.SetActive(false);
+                    panel.currentTower.rangeIndicator.gameObject.SetActive(false);
                 }
             }
         }
@@ -55,6 +60,16 @@ public class PanelManager : MonoBehaviour
     {
         panel.gameObject.SetActive(true);
         panel.currentTower = tower;
+        panel.dropdown.SetValueWithoutNotify((int)panel.currentTower.shotMode);
+    }
+
+    public static void DeactivatePanel()
+    {
+        if (panel.gameObject.activeSelf == true)
+        {
+            panel.currentTower.rangeIndicator.gameObject.SetActive(false);
+            panel.gameObject.SetActive(false);
+        }
     }
 
     public void OnDropdownChange(int value)

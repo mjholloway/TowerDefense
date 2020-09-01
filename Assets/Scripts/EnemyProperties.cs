@@ -18,13 +18,13 @@ public class EnemyProperties : MonoBehaviour
 
     PlayerHealth player;
     EnemySpawner enemies;
-    List<Waypoint> path = new List<Waypoint>();
+    //List<Waypoint> path = new List<Waypoint>();
 
     private void Start()
     {
         enemies = GetComponentInParent<EnemySpawner>();
-        Pathfinder pathfinder = FindObjectOfType<Pathfinder>();
-        path = pathfinder.GetPath();
+        //Pathfinder pathfinder = FindObjectOfType<Pathfinder>();
+        //path = pathfinder.GetPath();
     }
 
     private void OnParticleCollision(GameObject other)
@@ -65,8 +65,14 @@ public class EnemyProperties : MonoBehaviour
 
     public void SetCurrentLocation()
     {
-        transform.position = path[waypointIndex].transform.position;
-        if (waypointIndex + 1 == path.Count)
+        try { transform.position = Pathfinder.path[waypointIndex].transform.position; }
+        catch 
+        {
+            print("an error occurred");
+            return; 
+        }
+        
+        if (waypointIndex + 1 == Pathfinder.path.Count)
         {
             ProcessReachingGoal();
         }

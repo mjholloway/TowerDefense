@@ -15,6 +15,8 @@ public class Tower : MonoBehaviour
 {
     public NeutralBlock baseBlock;
     public shotOptions shotMode = 0;
+    public bool isSelected = false;
+    public TowerRangeIndicator rangeIndicator;
 
     [SerializeField] Transform objectToPan;
     [SerializeField] float attackRange = 29f;
@@ -29,6 +31,7 @@ public class Tower : MonoBehaviour
     {
         particles = GetComponentInChildren<ParticleSystem>();
         enemies = FindObjectOfType<EnemySpawner>();
+        rangeIndicator = GetComponentInChildren<TowerRangeIndicator>(true);
     }
 
     // Update is called once per frame
@@ -77,7 +80,7 @@ public class Tower : MonoBehaviour
 
     private void FindFirstEnemy(float newDistance, EnemyProperties enemy)
     {
-        if (!targetEnemy || enemy.waypointIndex < targetEnemy.waypointIndex)
+        if (!targetEnemy || targetDistance > attackRange || enemy.waypointIndex < targetEnemy.waypointIndex)
         {
             targetEnemy = enemy;
             targetDistance = newDistance;
@@ -115,6 +118,8 @@ public class Tower : MonoBehaviour
 
     private void OnMouseDown()
     {
+        PanelManager.DeactivatePanel();
         PanelManager.ActivatePanel(this);
+        rangeIndicator.gameObject.SetActive(true);
     }
 }

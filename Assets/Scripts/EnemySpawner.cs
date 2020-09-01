@@ -12,7 +12,6 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] float secondsBetweenSpawn = 5f;
     [SerializeField] GameObject enemyPrefab;
     [SerializeField] AudioClip spawnEnemySfx;
-    [SerializeField] float moveDelay = .5f;
 
     List<EnemyProperties> enemies = new List<EnemyProperties>();
     int enemyCount = 0;

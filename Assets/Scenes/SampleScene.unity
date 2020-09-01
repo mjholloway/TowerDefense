@@ -1061,7 +1061,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 122452650}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -10, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1085,7 +1085,6 @@ MonoBehaviour:
   enemyPrefab: {fileID: 1289942997295908, guid: 04f81ff9814844ccfa08226f8d46a3f4,
     type: 3}
   spawnEnemySfx: {fileID: 8300000, guid: a9612514af535884fa4de2ff0b035022, type: 3}
-  moveDelay: 0.5
 --- !u!82 &122452653
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2768,7 +2767,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 567230327}
-  - component: {fileID: 567230328}
   m_Layer: 0
   m_Name: Environment
   m_TagString: Untagged
@@ -2793,21 +2791,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &567230328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 567230326}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 406ae75bbf37327468f7a9597f41fb1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  towerPrefab: {fileID: 4520173044832362836, guid: 4c259db4ed6ae5241b24c180dec9fc73,
-    type: 3}
-  towerLimit: 5
 --- !u!4 &570679878 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2801249428753978974, guid: 49e43f21610c88d4191c348bab1d5e1d,
@@ -3406,7 +3389,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 5
-  money: 100
+  money: 200
   healthText: {fileID: 685035846}
   moneyText: {fileID: 846165023}
 --- !u!4 &746456974 stripped
@@ -5336,9 +5319,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1460579380}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63078f6b89268fe48b9f5d94c873740b, type: 3}
+  m_Script: {fileID: 11500000, guid: 406ae75bbf37327468f7a9597f41fb1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  towerPrefab: {fileID: 4520173044832362836, guid: 4c259db4ed6ae5241b24c180dec9fc73,
+    type: 3}
+  towerLimit: 5
 --- !u!1001 &1483369143
 PrefabInstance:
   m_ObjectHideFlags: 0

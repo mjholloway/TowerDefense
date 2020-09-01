@@ -10,8 +10,7 @@ public class NewEnemyMover : MonoBehaviour
 
     EnemySpawner enemies;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         enemies = GetComponent<EnemySpawner>();
         StartCoroutine(MoveEnemies());
@@ -24,14 +23,7 @@ public class NewEnemyMover : MonoBehaviour
             foreach (EnemyProperties enemy in enemies.getEnemies().ToList())
             {
                 enemy.waypointIndex++;
-                try
-                {
-                    enemy.SetCurrentLocation();
-                } 
-                catch
-                {
-                    print("oops");
-                }
+                enemy.SetCurrentLocation();
                 
             }
             yield return new WaitForSeconds(moveDelay);
