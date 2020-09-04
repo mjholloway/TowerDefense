@@ -15,7 +15,6 @@ public class PanelManager : MonoBehaviour
     }
     public Tower currentTower;
 
-    bool hasBeenActivated = false;
     TMP_Dropdown dropdown;
 
     private void Start()

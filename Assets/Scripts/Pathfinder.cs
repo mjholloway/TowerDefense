@@ -23,6 +23,10 @@ public class Pathfinder : MonoBehaviour
 
     private void Start()
     {
+        if (path.Count != 0)
+        {
+            path.Clear();
+        }
         LoadBlocks();
         BreadthFirstSearch();
         CreatePath();

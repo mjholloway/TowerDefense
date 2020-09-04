@@ -11,6 +11,8 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] Text healthText;
     [SerializeField] Text moneyText;
     // Start is called before the first frame update
+
+
     void Start()
     {
         healthText.text = health.ToString();
@@ -22,5 +24,9 @@ public class PlayerHealth : MonoBehaviour
     {
         healthText.text = health.ToString();
         moneyText.text = "$" + money.ToString();
+        if (health <= 0)
+        {
+            EventManager.TriggerEvent("ShowDeathScreen");
+        }
     }
 }

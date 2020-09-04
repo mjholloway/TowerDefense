@@ -6,13 +6,7 @@ public class TowerFactory : MonoBehaviour
 {
     [SerializeField] Tower towerPrefab;
     [SerializeField] int towerLimit = 5;
-
-    PlayerHealth player;
-
-    private void Start()
-    {
-        player = FindObjectOfType<PlayerHealth>();
-    }
+    [SerializeField] PlayerHealth player;
 
     public void AddTower(NeutralBlock block)
     {

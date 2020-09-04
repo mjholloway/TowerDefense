@@ -12,6 +12,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] float secondsBetweenSpawn = 5f;
     [SerializeField] GameObject enemyPrefab;
     [SerializeField] AudioClip spawnEnemySfx;
+    [SerializeField] PlayerHealth player;
 
     List<EnemyProperties> enemies = new List<EnemyProperties>();
     int enemyCount = 0;
@@ -22,8 +23,17 @@ public class EnemySpawner : MonoBehaviour
         StartCoroutine(SpawnEnemy());
     }
 
+    private void Update()
+    {
+        if (deadEnemies == enemyMax && player.health > 0)
+        {
+            EventManager.TriggerEvent("ShowVictoryScreen");
+        }
+    }
+
     private IEnumerator SpawnEnemy()
-    {        
+    {
+        
         while (enemyCount < enemyMax)
         {
             yield return new WaitForSeconds(secondsBetweenSpawn);
@@ -39,5 +49,15 @@ public class EnemySpawner : MonoBehaviour
     public List<EnemyProperties> getEnemies()
     {
         return enemies;
+    }
+
+    public void GivePlayerMoney(int money = 1)
+    {
+        player.money += money;
+    }
+
+    public void DamagePlayer(int damage = 1)
+    {
+        player.health -= damage;
     }
 }

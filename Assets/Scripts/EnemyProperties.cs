@@ -16,15 +16,11 @@ public class EnemyProperties : MonoBehaviour
     [SerializeField] ParticleSystem goalParticles;
     [SerializeField] AudioClip reachedGoalSfx;
 
-    PlayerHealth player;
     EnemySpawner enemies;
-    //List<Waypoint> path = new List<Waypoint>();
 
     private void Start()
     {
         enemies = GetComponentInParent<EnemySpawner>();
-        //Pathfinder pathfinder = FindObjectOfType<Pathfinder>();
-        //path = pathfinder.GetPath();
     }
 
     private void OnParticleCollision(GameObject other)
@@ -43,16 +39,10 @@ public class EnemyProperties : MonoBehaviour
     {
         enemies.getEnemies().Remove(this);
         enemies.deadEnemies++;
-        GiveMoney();
+        enemies.GivePlayerMoney();
         ParticleSystem deathFx = PlayDeathEffects();
         Destroy(deathFx.gameObject, deathFx.main.duration);
         Destroy(gameObject);
-    }
-
-    private void GiveMoney()
-    {
-        player = FindObjectOfType<PlayerHealth>();
-        player.money += 10;
     }
     
     private ParticleSystem PlayDeathEffects()
@@ -65,12 +55,7 @@ public class EnemyProperties : MonoBehaviour
 
     public void SetCurrentLocation()
     {
-        try { transform.position = Pathfinder.path[waypointIndex].transform.position; }
-        catch 
-        {
-            print("an error occurred");
-            return; 
-        }
+        transform.position = Pathfinder.path[waypointIndex].transform.position;
         
         if (waypointIndex + 1 == Pathfinder.path.Count)
         {
@@ -81,7 +66,7 @@ public class EnemyProperties : MonoBehaviour
     private void ProcessReachingGoal()
     {
         AudioSource.PlayClipAtPoint(reachedGoalSfx, new Vector3(23.5f, 80f, -64.1f));
-        FindObjectOfType<PlayerHealth>().health--;
+        enemies.DamagePlayer();
         SelfDestruct();
     }
 
@@ -90,6 +75,7 @@ public class EnemyProperties : MonoBehaviour
         ParticleSystem goalFx = Instantiate(goalParticles, transform.position, Quaternion.identity);
         goalFx.Play();
         enemies.getEnemies().Remove(this);
+        enemies.deadEnemies++;
         Destroy(goalFx.gameObject, goalFx.main.duration);
         Destroy(gameObject);
     }
