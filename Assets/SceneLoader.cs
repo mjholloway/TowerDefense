@@ -24,6 +24,14 @@ public class SceneLoader : MonoBehaviour
         EventManager.StartListening("ShowDeathScreen", ShowDeathScreen);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }
+
     private void OnDisable()
     {
         EventManager.StopListening("ShowVictoryScreen", ShowVictoryScreen);
