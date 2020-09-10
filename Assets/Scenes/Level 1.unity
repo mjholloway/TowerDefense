@@ -134,6 +134,14 @@ PrefabInstance:
       propertyPath: parent
       value: 
       objectReference: {fileID: 1460579380}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: factory
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: towerCreator
+      value: 
+      objectReference: {fileID: 503714807}
     - target: {fileID: 1346198445039670, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
       propertyPath: m_Name
       value: Block_Neutral (1)
@@ -2517,6 +2525,96 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 49e43f21610c88d4191c348bab1d5e1d, type: 3}
+--- !u!1 &503714805
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 503714806}
+  - component: {fileID: 503714809}
+  - component: {fileID: 503714808}
+  - component: {fileID: 503714807}
+  m_Layer: 5
+  m_Name: RawImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &503714806
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503714805}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1655043099}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.0000038147, y: 195}
+  m_SizeDelta: {x: 169.38574, y: 153.17676}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &503714807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503714805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37f3c500ce2554d45a4cc685a6fbe03a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  holdingTower: 0
+  tower: {fileID: 0}
+  towerPrefab: {fileID: 4520173044832362837, guid: 4c259db4ed6ae5241b24c180dec9fc73,
+    type: 3}
+  player: {fileID: 309701012}
+--- !u!114 &503714808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503714805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 2800000, guid: 3db8a1af8180d154e9c03aa180bbc771, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &503714809
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503714805}
+  m_CullTransparentMesh: 0
 --- !u!1001 &510135615
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3082,6 +3180,14 @@ PrefabInstance:
       propertyPath: parent
       value: 
       objectReference: {fileID: 1460579381}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: factory
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: towerCreator
+      value: 
+      objectReference: {fileID: 503714807}
     - target: {fileID: 1346198445039670, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
       propertyPath: m_Name
       value: Block_Neutral (4)
@@ -3303,6 +3409,14 @@ PrefabInstance:
       propertyPath: hasTower
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: factory
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: towerCreator
+      value: 
+      objectReference: {fileID: 503714807}
     - target: {fileID: 1346198445039670, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
       propertyPath: m_Name
       value: Block_Neutral (2)
@@ -4094,6 +4208,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 258593681}
     m_Modifications:
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: factory
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: towerCreator
+      value: 
+      objectReference: {fileID: 503714807}
     - target: {fileID: 1346198445039670, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
       propertyPath: m_Name
       value: Block_Neutral (11)
@@ -4151,6 +4273,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 258593681}
     m_Modifications:
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: factory
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: towerCreator
+      value: 
+      objectReference: {fileID: 503714807}
     - target: {fileID: 1346198445039670, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
       propertyPath: m_Name
       value: Block_Neutral (3)
@@ -4681,6 +4811,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 258593681}
     m_Modifications:
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: factory
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: towerCreator
+      value: 
+      objectReference: {fileID: 503714807}
     - target: {fileID: 1346198445039670, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
       propertyPath: m_Name
       value: Block_Neutral (6)
@@ -5291,6 +5429,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 258593681}
     m_Modifications:
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: factory
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: towerCreator
+      value: 
+      objectReference: {fileID: 503714807}
     - target: {fileID: 1346198445039670, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
       propertyPath: m_Name
       value: Block_Neutral (9)
@@ -5815,6 +5961,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 258593681}
     m_Modifications:
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: factory
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: towerCreator
+      value: 
+      objectReference: {fileID: 503714807}
     - target: {fileID: 1346198445039670, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
       propertyPath: m_Name
       value: Block_Neutral (5)
@@ -5965,7 +6119,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1460579381}
-  - component: {fileID: 1460579382}
   m_Layer: 0
   m_Name: Towers
   m_TagString: Untagged
@@ -5987,22 +6140,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1460579382
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1460579380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 406ae75bbf37327468f7a9597f41fb1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  towerPrefab: {fileID: 4520173044832362836, guid: 4c259db4ed6ae5241b24c180dec9fc73,
-    type: 3}
-  towerLimit: 5
-  player: {fileID: 309701012}
 --- !u!1001 &1483369143
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6010,6 +6147,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 258593681}
     m_Modifications:
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: factory
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: towerCreator
+      value: 
+      objectReference: {fileID: 503714807}
     - target: {fileID: 1346198445039670, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
       propertyPath: m_Name
       value: Block_Neutral
@@ -6067,6 +6212,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 258593681}
     m_Modifications:
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: factory
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: towerCreator
+      value: 
+      objectReference: {fileID: 503714807}
     - target: {fileID: 1346198445039670, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
       propertyPath: m_Name
       value: Block_Neutral (10)
@@ -6130,6 +6283,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 258593681}
     m_Modifications:
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: factory
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: towerCreator
+      value: 
+      objectReference: {fileID: 503714807}
     - target: {fileID: 1346198445039670, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
       propertyPath: m_Name
       value: Block_Neutral (7)
@@ -6657,6 +6818,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 258593681}
     m_Modifications:
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: factory
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: towerCreator
+      value: 
+      objectReference: {fileID: 503714807}
     - target: {fileID: 1346198445039670, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
       propertyPath: m_Name
       value: Block_Neutral (8)
@@ -6817,6 +6986,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 24244104}
+  - {fileID: 503714806}
   m_Father: {fileID: 121550800}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7414,6 +7584,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 258593681}
     m_Modifications:
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: factory
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: towerCreator
+      value: 
+      objectReference: {fileID: 503714807}
     - target: {fileID: 1346198445039670, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
       propertyPath: m_Name
       value: Block_Neutral (12)
@@ -7475,6 +7653,14 @@ PrefabInstance:
       propertyPath: parent
       value: 
       objectReference: {fileID: 1460579381}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: factory
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 888937537, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
+      propertyPath: towerCreator
+      value: 
+      objectReference: {fileID: 503714807}
     - target: {fileID: 1346198445039670, guid: 700ff3467e6f35c4d9307b685e8746d1, type: 3}
       propertyPath: m_Name
       value: Block_Neutral
