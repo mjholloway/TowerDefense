@@ -49,6 +49,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOverBlock: 0
+  red: {fileID: 2100000, guid: 5c892f675fbb5ee4c8d1cee361476663, type: 2}
+  green: {fileID: 2100000, guid: ecdf8a1cd78ccb64c801580fe9c9acc5, type: 2}
 --- !u!114 &4520173044832362836
 MonoBehaviour:
   m_ObjectHideFlags: 0
