@@ -17,7 +17,7 @@ public class Tower : MonoBehaviour
     public NeutralBlock baseBlock;
     public shotOptions shotMode = 0;
     public bool isSelected = false;
-    public TowerRangeIndicator rangeIndicator;
+    public GameObject rangeIndicator;
 
     [SerializeField] Transform objectToPan;
     [SerializeField] float attackRange = 29f;
@@ -32,7 +32,6 @@ public class Tower : MonoBehaviour
     {
         particles = GetComponentInChildren<ParticleSystem>();
         enemies = FindObjectOfType<EnemySpawner>();
-        rangeIndicator = GetComponentInChildren<TowerRangeIndicator>(true);
     }
 
     // Update is called once per frame
@@ -108,7 +107,7 @@ public class Tower : MonoBehaviour
 
     private void LookAtEnemy()
     {
-            objectToPan.LookAt(targetEnemy.transform);      
+        objectToPan.LookAt(targetEnemy.transform);    
     }
 
     private void ShootEnemy(bool inRange)
@@ -121,6 +120,6 @@ public class Tower : MonoBehaviour
     {
         PanelManager.DeactivatePanel();
         PanelManager.ActivatePanel(this);
-        rangeIndicator.gameObject.SetActive(true);
+        rangeIndicator.SetActive(true);
     }
 }

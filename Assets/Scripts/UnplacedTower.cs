@@ -9,6 +9,7 @@ public class UnplacedTower : MonoBehaviour
 
     [SerializeField] Material red;
     [SerializeField] Material green;
+    [SerializeField] Material defaultStrawberry;
 
     Tower tower;
     Ray ray;
@@ -30,15 +31,7 @@ public class UnplacedTower : MonoBehaviour
         var emissionModule = GetComponentInChildren<ParticleSystem>().emission;
         emissionModule.enabled = false;
         tower.GetComponent<BoxCollider>().enabled = false;
-        SetPlacementColor();
-    }
-
-    private void SetPlacementColor()
-    {
         towerMeshes = GetComponentsInChildren<MeshRenderer>();
-        defaultMaterials[0] = towerMeshes[0].material;  //store asset materials because i don't know how to get them otherwise
-        defaultMaterials[1] = towerMeshes[1].material;
-
         SetColor(red);
     }
 
@@ -65,7 +58,7 @@ public class UnplacedTower : MonoBehaviour
     {
         tower.enabled = true;
         tower.GetComponent<BoxCollider>().enabled = true;
-        RestoreDefaultMaterials();
+        SetColor(defaultStrawberry);
         enabled = false;
     }
 
@@ -87,14 +80,6 @@ public class UnplacedTower : MonoBehaviour
         foreach (MeshRenderer mesh in towerMeshes)
         {
             mesh.material = color;
-        }
-    }
-
-    private void RestoreDefaultMaterials()
-    {
-        for (int i = 0; i < 2; i++)
-        {
-            towerMeshes[i].material = defaultMaterials[i];
         }
     }
 }

@@ -2577,7 +2577,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   holdingTower: 0
   tower: {fileID: 0}
-  towerPrefab: {fileID: 4520173044832362837, guid: 4c259db4ed6ae5241b24c180dec9fc73,
+  towerPrefab: {fileID: 3634200655744318916, guid: 772d20ccf5bbe1c4fa19a558da91713e,
     type: 3}
   player: {fileID: 309701012}
 --- !u!114 &503714808
@@ -2600,7 +2600,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 3db8a1af8180d154e9c03aa180bbc771, type: 3}
+  m_Texture: {fileID: 2800000, guid: 8df581f3e2beeda44b832aa6e395ef64, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0

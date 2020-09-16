@@ -43,13 +43,13 @@ public class PanelManager : MonoBehaviour
                     if (hit.transform.gameObject.GetComponent<Tower>() == null)
                     {
                         gameObject.SetActive(false);
-                        panel.currentTower.rangeIndicator.gameObject.SetActive(false);
+                        panel.currentTower.rangeIndicator.SetActive(false);
                     }
                 }
                 else
                 {
                     gameObject.SetActive(false);
-                    panel.currentTower.rangeIndicator.gameObject.SetActive(false);
+                    panel.currentTower.rangeIndicator.SetActive(false);
                 }
             }
         }
@@ -66,7 +66,7 @@ public class PanelManager : MonoBehaviour
     {
         if (panel.gameObject.activeSelf == true)
         {
-            panel.currentTower.rangeIndicator.gameObject.SetActive(false);
+            panel.currentTower.rangeIndicator.SetActive(false);
             panel.gameObject.SetActive(false);
         }
     }
