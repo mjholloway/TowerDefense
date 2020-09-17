@@ -21,12 +21,15 @@ public class Tower : MonoBehaviour
 
     [SerializeField] Transform objectToPan;
     [SerializeField] float attackRange = 29f;
+    [SerializeField] GameObject stillFace;
+    [SerializeField] GameObject shootingFace;
 
     List<EnemyProperties> enemyList = new List<EnemyProperties>();
     ParticleSystem particles;
     EnemySpawner enemies;
     EnemyProperties targetEnemy;
     float targetDistance = 100f;
+    bool isShooting = false;
 
     private void Start()
     {
@@ -114,6 +117,33 @@ public class Tower : MonoBehaviour
     {
         var emissionModule = particles.emission;
         emissionModule.enabled = inRange;
+
+        //Start face coroutine if an enemy is in range and it has not already been started, and stop the corotine if an enemy is not in range
+        if (inRange)
+        {
+            if (!isShooting)
+            {
+                StartCoroutine(ChangeFace(emissionModule));
+            }
+        }
+        else
+        {
+            StopCoroutine(ChangeFace(emissionModule));
+        }
+
+        isShooting = inRange;
+    }
+
+    private IEnumerator ChangeFace(ParticleSystem.EmissionModule emissionModule)
+    {
+        while (true)
+        {
+            print("yep");
+            EnableShootingFace();
+            yield return new WaitForSeconds(.5f/emissionModule.rateOverTime.constant);
+            EnableStillFace();
+            yield return new WaitForSeconds(.5f / emissionModule.rateOverTime.constant);
+        }
     }
 
     public void OnMouseDown()
@@ -121,5 +151,17 @@ public class Tower : MonoBehaviour
         PanelManager.DeactivatePanel();
         PanelManager.ActivatePanel(this);
         rangeIndicator.SetActive(true);
+    }
+
+    void EnableShootingFace()
+    {
+        stillFace.SetActive(false);
+        shootingFace.SetActive(true);
+    }
+
+    void EnableStillFace()
+    {
+        stillFace.SetActive(true);
+        shootingFace.SetActive(false);
     }
 }
