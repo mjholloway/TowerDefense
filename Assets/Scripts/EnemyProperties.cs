@@ -23,7 +23,7 @@ public class EnemyProperties : MonoBehaviour
         enemies = GetComponentInParent<EnemySpawner>();
     }
 
-    private void OnParticleCollision(GameObject other)
+    private void OnCollisionEnter(Collision collision)
     {
         hitParticles.Play();
         hitsLeft--;
@@ -33,7 +33,21 @@ public class EnemyProperties : MonoBehaviour
         {
             ProcessEnemyDeath();
         }
+
+        Destroy(collision.collider.gameObject);
     }
+
+    //private void OnParticleCollision(GameObject other)
+    //{
+    //    hitParticles.Play();
+    //    hitsLeft--;
+    //    GetComponent<AudioSource>().PlayOneShot(hitSfx);
+
+    //    if (hitsLeft == 0)
+    //    {
+    //        ProcessEnemyDeath();
+    //    }
+    //}
 
     public void ProcessEnemyDeath()
     {

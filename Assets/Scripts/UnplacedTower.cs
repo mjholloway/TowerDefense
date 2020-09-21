@@ -28,8 +28,8 @@ public class UnplacedTower : MonoBehaviour
     private void InitializePlacementMode()
     {
         tower.enabled = false;
-        var emissionModule = GetComponentInChildren<ParticleSystem>().emission;
-        emissionModule.enabled = false;
+        //var emissionModule = GetComponentInChildren<ParticleSystem>().emission;
+        //emissionModule.enabled = false;
         tower.GetComponent<BoxCollider>().enabled = false;
         towerMeshes = GetComponentsInChildren<MeshRenderer>();
         SetColor(red);

@@ -23,6 +23,7 @@ public class Tower : MonoBehaviour
     [SerializeField] float attackRange = 29f;
     [SerializeField] GameObject stillFace;
     [SerializeField] GameObject shootingFace;
+    [SerializeField] GameObject bulletPrefab;
 
     List<EnemyProperties> enemyList = new List<EnemyProperties>();
     ParticleSystem particles;
@@ -115,35 +116,44 @@ public class Tower : MonoBehaviour
 
     private void ShootEnemy(bool inRange)
     {
-        var emissionModule = particles.emission;
-        emissionModule.enabled = inRange;
+        //var emissionModule = particles.emission;
+        //emissionModule.enabled = inRange;
 
         //Start face coroutine if an enemy is in range and it has not already been started, and stop the corotine if an enemy is not in range
         if (inRange)
         {
             if (!isShooting)
             {
-                StartCoroutine(ChangeFace(emissionModule));
+                StartCoroutine(ChangeFace());
             }
         }
         else
         {
-            StopCoroutine(ChangeFace(emissionModule));
+            StopCoroutine(ChangeFace());
         }
 
         isShooting = inRange;
     }
 
-    private IEnumerator ChangeFace(ParticleSystem.EmissionModule emissionModule)
+    private IEnumerator ChangeFace()
     {
         while (true)
         {
-            print("yep");
+            CreateBullet();
             EnableShootingFace();
-            yield return new WaitForSeconds(.5f/emissionModule.rateOverTime.constant);
+            yield return new WaitForSeconds(.25f);
             EnableStillFace();
-            yield return new WaitForSeconds(.5f / emissionModule.rateOverTime.constant);
+            yield return new WaitForSeconds(.25f);
         }
+    }
+
+    private void CreateBullet()
+    {
+        //bullet movement is handled in BulletMover script
+        Vector3 bulletInstLocation = new Vector3(transform.position.x, transform.position.y + 4.5f, transform.position.z - 4);
+        var newBullet = Instantiate(bulletPrefab, bulletInstLocation, Quaternion.identity);
+        newBullet.GetComponent<BulletMover>().SetTarget(targetEnemy);
+        newBullet.transform.parent = transform;
     }
 
     public void OnMouseDown()
