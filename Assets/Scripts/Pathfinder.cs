@@ -61,7 +61,7 @@ public class Pathfinder : MonoBehaviour
         var waypoints = FindObjectsOfType<Waypoint>();
         foreach (Waypoint waypoint in waypoints)
         {
-            var gridPos = waypoint.GetGridPos();
+            var gridPos = waypoint.GetComponent<CubeEditor>().GetGridPos();
             if (grid.ContainsKey(gridPos))
             {
                 Debug.LogWarning("Overlapping block " + waypoint);
@@ -100,7 +100,7 @@ public class Pathfinder : MonoBehaviour
 
         foreach (Vector2Int direction in directions)
         {
-            Vector2Int neighborCoordinates = direction + searchCenter.GetGridPos();
+            Vector2Int neighborCoordinates = direction + searchCenter.GetComponent<CubeEditor>().GetGridPos();
             if (grid.ContainsKey(neighborCoordinates))
             {
                 QueueNewNeighbors(neighborCoordinates);

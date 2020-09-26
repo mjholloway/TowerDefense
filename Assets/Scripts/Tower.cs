@@ -150,10 +150,27 @@ public class Tower : MonoBehaviour
     private void CreateBullet()
     {
         //bullet movement is handled in BulletMover script
-        Vector3 bulletInstLocation = new Vector3(transform.position.x, transform.position.y + 4.5f, transform.position.z - 4);
-        var newBullet = Instantiate(bulletPrefab, bulletInstLocation, Quaternion.identity);
+        Vector3 bulletInstLocation = FindBulletLocation();
+        var newBullet = Instantiate(bulletPrefab, bulletInstLocation, transform.rotation);
         newBullet.GetComponent<BulletMover>().SetTarget(targetEnemy);
         newBullet.transform.parent = transform;
+    }
+
+    private Vector3 FindBulletLocation()
+    {
+        // Using a circle around the tower, calculate where the bullet should be created by converting the polar coordinates into cartesian coordinates.
+        // Note that for the purposes of calculation the x and z coordinates represent the y and x coordinates respectively. Sin is used for x, and Cos for z
+        // despite the fact that x would normally be calculated with cos and y would be calculated with sin. This is because of the orientation of the object
+        // within the scene.
+        float radius = 4f;
+        float angle = transform.Find("Strawberry Objects").rotation.eulerAngles.y * (Mathf.PI/180);
+        float xCenter = transform.position.x;
+        float zCenter = transform.position.z;
+
+        float bulletX = xCenter + (radius * Mathf.Sin(angle));
+        float bulletZ = zCenter + (radius * Mathf.Cos(angle));
+
+        return new Vector3(bulletX, transform.position.y + 4.5f, bulletZ); 
     }
 
     public void OnMouseDown()

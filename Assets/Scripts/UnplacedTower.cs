@@ -65,7 +65,7 @@ public class UnplacedTower : MonoBehaviour
     public void SnapTower(GameObject block)
     {
         isOverBlock = true;
-        transform.position = new Vector3(block.transform.position.x, block.transform.position.y + 10f, block.transform.position.z);
+        transform.position = new Vector3(block.transform.position.x, block.transform.position.y + 4.5f, block.transform.position.z);
         SetColor(green);
     }
 
