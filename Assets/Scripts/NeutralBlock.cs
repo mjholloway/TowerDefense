@@ -20,9 +20,19 @@ public class NeutralBlock : MonoBehaviour
             {
                 //factory.AddTower(this);
                 hasTower = true;
+                AddRoots();
                 towerCreator.ClearTower();
             }
         }
+    }
+
+    private void AddRoots()
+    {
+        //Simply iterate through the children of this GameObject (which are simply the two different blocks) and disable the first (the normal block)
+        //and enable the second (the roots block).
+        var children = GetComponentsInChildren<MeshRenderer>(true);
+        children[0].gameObject.SetActive(false);
+        children[1].gameObject.SetActive(true);
     }
 
     private void OnMouseExit()

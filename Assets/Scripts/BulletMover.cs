@@ -23,6 +23,7 @@ public class BulletMover : MonoBehaviour
             float step = speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
         }
+        else { Destroy(gameObject); }
     }
 
     public void SetTarget(EnemyProperties enemy)

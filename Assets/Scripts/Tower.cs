@@ -31,6 +31,7 @@ public class Tower : MonoBehaviour
     EnemyProperties targetEnemy;
     float targetDistance = 100f;
     bool isShooting = false;
+    Coroutine coroutine;
 
     private void Start()
     {
@@ -124,12 +125,15 @@ public class Tower : MonoBehaviour
         {
             if (!isShooting)
             {
-                StartCoroutine(ChangeFace());
+                coroutine = StartCoroutine(ChangeFace());
             }
         }
         else
         {
-            StopCoroutine(ChangeFace());
+            if (coroutine != null)
+            {
+                StopCoroutine(coroutine);
+            }
         }
 
         isShooting = inRange;
@@ -150,18 +154,21 @@ public class Tower : MonoBehaviour
     private void CreateBullet()
     {
         //bullet movement is handled in BulletMover script
-        Vector3 bulletInstLocation = FindBulletLocation();
-        var newBullet = Instantiate(bulletPrefab, bulletInstLocation, transform.rotation);
-        newBullet.GetComponent<BulletMover>().SetTarget(targetEnemy);
-        newBullet.transform.parent = transform;
+        if (targetEnemy)
+        {
+            Vector3 bulletInstLocation = FindBulletLocation();
+            var newBullet = Instantiate(bulletPrefab, bulletInstLocation, transform.rotation);
+            newBullet.GetComponent<BulletMover>().SetTarget(targetEnemy);
+            newBullet.transform.parent = transform;
+        }
     }
 
     private Vector3 FindBulletLocation()
     {
         // Using a circle around the tower, calculate where the bullet should be created by converting the polar coordinates into cartesian coordinates.
         // Note that for the purposes of calculation the x and z coordinates represent the y and x coordinates respectively. Sin is used for x, and Cos for z
-        // despite the fact that x would normally be calculated with cos and y would be calculated with sin. This is because of the orientation of the object
-        // within the scene.
+        // despite the fact that x would normally be calculated with cos and y would be calculated with sin. This is because the z axis in scene corresponds to
+        // the cartesian x axis while the x axis in scene corresponds to the cartesian y axis with respect to the gameobject orientation.
         float radius = 4f;
         float angle = transform.Find("Strawberry Objects").rotation.eulerAngles.y * (Mathf.PI/180);
         float xCenter = transform.position.x;
