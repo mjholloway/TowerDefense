@@ -54,8 +54,9 @@ public class UnplacedTower : MonoBehaviour
         }
     }
 
-    public void ActivateTower()
+    public void ActivateTower(GameObject parent)
     {
+        transform.parent = parent.transform;
         tower.enabled = true;
         tower.GetComponent<BoxCollider>().enabled = true;
         SetColor(defaultStrawberry);

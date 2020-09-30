@@ -10,6 +10,7 @@ public class TowerCreator : MonoBehaviour, IPointerDownHandler
 
     [SerializeField] GameObject towerPrefab;
     [SerializeField] PlayerHealth player;
+    [SerializeField] GameObject towerParent;
 
     public void OnPointerDown(PointerEventData pointerEventData)
     {
@@ -23,7 +24,7 @@ public class TowerCreator : MonoBehaviour, IPointerDownHandler
 
     public void ClearTower()
     {
-        tower.GetComponent<UnplacedTower>().ActivateTower();
+        tower.GetComponent<UnplacedTower>().ActivateTower(towerParent);
         holdingTower = false;
         tower = null;
     }

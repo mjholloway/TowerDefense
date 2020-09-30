@@ -11,10 +11,10 @@ public class EnemyProperties : MonoBehaviour
 
     [SerializeField] ParticleSystem hitParticles;
     [SerializeField] ParticleSystem deathParticlePrefab;
-    [SerializeField] AudioClip hitSfx;
-    [SerializeField] AudioClip deathSoundFx;
-    [SerializeField] ParticleSystem goalParticles;
-    [SerializeField] AudioClip reachedGoalSfx;
+    //[SerializeField] AudioClip hitSfx;
+    //[SerializeField] AudioClip deathSoundFx;
+    //[SerializeField] ParticleSystem goalParticles;
+    //[SerializeField] AudioClip reachedGoalSfx;
 
     EnemySpawner enemies;
 
@@ -27,7 +27,7 @@ public class EnemyProperties : MonoBehaviour
     {
         hitParticles.Play();
         hitsLeft--;
-        GetComponent<AudioSource>().PlayOneShot(hitSfx);
+        //GetComponent<AudioSource>().PlayOneShot(hitSfx);
 
         if (hitsLeft == 0)
         {
@@ -37,6 +37,7 @@ public class EnemyProperties : MonoBehaviour
         Destroy(collision.collider.gameObject);
     }
 
+    //Old code from when I used particles as bullets
     //private void OnParticleCollision(GameObject other)
     //{
     //    hitParticles.Play();
@@ -61,8 +62,9 @@ public class EnemyProperties : MonoBehaviour
     
     private ParticleSystem PlayDeathEffects()
     {
-        AudioSource.PlayClipAtPoint(deathSoundFx, new Vector3(23.5f, 80f, -64.1f));
-        ParticleSystem deathFx = Instantiate(deathParticlePrefab, transform.position, Quaternion.identity);
+        Vector3 adjustedPos = new Vector3(transform.position.x, transform.position.y + 5f, transform.position.z);
+        //AudioSource.PlayClipAtPoint(deathSoundFx, new Vector3(23.5f, 80f, -64.1f));
+        ParticleSystem deathFx = Instantiate(deathParticlePrefab, adjustedPos, Quaternion.identity);
         deathFx.Play();
         return deathFx;
     }
@@ -79,18 +81,18 @@ public class EnemyProperties : MonoBehaviour
 
     private void ProcessReachingGoal()
     {
-        AudioSource.PlayClipAtPoint(reachedGoalSfx, new Vector3(23.5f, 80f, -64.1f));
+        //AudioSource.PlayClipAtPoint(reachedGoalSfx, new Vector3(23.5f, 80f, -64.1f));
         enemies.DamagePlayer();
         SelfDestruct();
     }
 
     private void SelfDestruct()
     {
-        ParticleSystem goalFx = Instantiate(goalParticles, transform.position, Quaternion.identity);
-        goalFx.Play();
+        //ParticleSystem goalFx = Instantiate(goalParticles, transform.position, Quaternion.identity);
+        //goalFx.Play();
         enemies.getEnemies().Remove(this);
         enemies.deadEnemies++;
-        Destroy(goalFx.gameObject, goalFx.main.duration);
+        //Destroy(goalFx.gameObject, goalFx.main.duration);
         Destroy(gameObject);
     }
 }
