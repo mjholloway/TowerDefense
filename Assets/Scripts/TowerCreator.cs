@@ -19,6 +19,7 @@ public class TowerCreator : MonoBehaviour, IPointerDownHandler
             holdingTower = true;
             Vector3 mouseVector = new Vector3(Input.mousePosition.x, 10, Input.mousePosition.y);
             tower = Instantiate(towerPrefab, mouseVector, Quaternion.identity);
+            player.money -= 100;
         }
     }
 
