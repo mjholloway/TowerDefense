@@ -22,9 +22,7 @@ public class NewEnemyMover : MonoBehaviour
         {
             foreach (EnemyProperties enemy in enemies.getEnemies().ToList())
             {
-                enemy.waypointIndex++;
-                enemy.SetCurrentLocation();
-                
+                enemy.SetNewLocation();                
             }
             yield return new WaitForSeconds(moveDelay);
         }

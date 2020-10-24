@@ -905,7 +905,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deadEnemies: 0
   enemyMax: 10
-  secondsBetweenSpawn: 4
+  secondsBetweenSpawn: 3
   enemyPrefab: {fileID: 4082678596817453127, guid: 3b8537165bcef9945b7aa74477c9d489,
     type: 3}
   spawnEnemySfx: {fileID: 8300000, guid: a9612514af535884fa4de2ff0b035022, type: 3}
@@ -6389,6 +6389,11 @@ PrefabInstance:
       propertyPath: healthText
       value: 
       objectReference: {fileID: 685035846}
+    - target: {fileID: 4404186304291595546, guid: 46a91edc44bd8e54f858a2f94cf1dcf0,
+        type: 3}
+      propertyPath: money
+      value: 200
+      objectReference: {fileID: 0}
     - target: {fileID: 5335564260608704188, guid: 46a91edc44bd8e54f858a2f94cf1dcf0,
         type: 3}
       propertyPath: m_Name

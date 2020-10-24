@@ -17,6 +17,9 @@ public class CameraMover : MonoBehaviour
         ZoomCamera();
     }
 
+    //This will call the FindDirection function along with the adjusted angle to perform calculations. It should be noted that the directions have to be adjusted 
+    //by 90 degrees since the 0 degree rotation is forward, while polar coordinates generally consider the 0 degree rotation to be to the "right". After the
+    //direction vector is calculated it is multipled by some factor (which can be changed in the editor) and added to the current position to move the camera.
     private void MoveCamera()
     {
         if (Input.GetKey(KeyCode.W))
@@ -43,6 +46,10 @@ public class CameraMover : MonoBehaviour
 
     Vector3 FindDirection(float angle)
     {
+        //This takes the negative rotation of the camera (the direction of rotation is the opposite of what normal polar coordinates would consider positive)
+        //and adjusts it based on the key pressed, then converts it to radians. It then uses basic polar equations to determine how much the x and z coordinates
+        //should be incremented by each frame. This assumes a unit circle. It is also worth noting that the typical cartesian y axis is actually the z axis since 
+        //we are rotating around the y axis.
         float radAngle = (-transform.rotation.eulerAngles.y + angle) * Mathf.PI / 180;
         float z = Mathf.Sin(radAngle);
         float x = Mathf.Cos(radAngle);

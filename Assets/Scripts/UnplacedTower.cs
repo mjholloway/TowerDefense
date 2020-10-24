@@ -15,7 +15,6 @@ public class UnplacedTower : MonoBehaviour
     Ray ray;
     RaycastHit hit;
     MeshRenderer[] towerMeshes;
-    Material[] defaultMaterials = new Material[2];
 
     void Start()
     {
@@ -28,8 +27,6 @@ public class UnplacedTower : MonoBehaviour
     private void InitializePlacementMode()
     {
         tower.enabled = false;
-        //var emissionModule = GetComponentInChildren<ParticleSystem>().emission;
-        //emissionModule.enabled = false;
         tower.GetComponent<BoxCollider>().enabled = false;
         towerMeshes = GetComponentsInChildren<MeshRenderer>();
         SetColor(red);
@@ -48,7 +45,7 @@ public class UnplacedTower : MonoBehaviour
     private void PositionAtMouse()
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, 9, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~(1 << 9), QueryTriggerInteraction.Ignore))
         {
             transform.position = hit.point;
         }

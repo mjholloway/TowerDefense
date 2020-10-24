@@ -69,13 +69,39 @@ public class EnemyProperties : MonoBehaviour
         return deathFx;
     }
 
-    public void SetCurrentLocation()
+    public void SetNewLocation()
     {
+        waypointIndex++;
         transform.position = Pathfinder.path[waypointIndex].transform.position;
-        
+   
         if (waypointIndex + 1 == Pathfinder.path.Count)
         {
             ProcessReachingGoal();
+        }
+        else
+        {
+            FaceForward();
+        }
+    }
+
+    private void FaceForward()
+    {
+        var direction = Pathfinder.path[waypointIndex + 1].transform.position - Pathfinder.path[waypointIndex].transform.position;
+        if (direction.x > 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (direction.x < 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+        else if (direction.z > 0)
+        {
+            transform.rotation = Quaternion.Euler(0, -90, 0);
+        }
+        else if (direction.z < 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 90, 0);
         }
     }
 
