@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class CameraMover : MonoBehaviour
 {
-
-    //TODO: incorporate time.deltatime
     [SerializeField] float movementFactor = 60f;
     [SerializeField] float rotationFactor = 60f;
     [SerializeField] float zoomFactor = 60f;
@@ -22,26 +20,30 @@ public class CameraMover : MonoBehaviour
     //direction vector is calculated it is multipled by some factor (which can be changed in the editor) and added to the current position to move the camera.
     private void MoveCamera()
     {
+        Vector3 direction = new Vector3(0, 0, 0);
+
         if (Input.GetKey(KeyCode.W))
         {
-            Vector3 direction = FindDirection(90);
-            transform.position += direction * movementFactor * Time.deltaTime;
+            direction = FindDirection(90);
         }
         if (Input.GetKey(KeyCode.A))
         {
-            Vector3 direction = FindDirection(180);
-            transform.position += direction * movementFactor * Time.deltaTime;
+            direction = FindDirection(180);
         }
         if (Input.GetKey(KeyCode.S))
         {
-            Vector3 direction = FindDirection(270);
-            transform.position += direction * movementFactor * Time.deltaTime;
+            direction = FindDirection(270);
         }
         if (Input.GetKey(KeyCode.D))
         {
-            Vector3 direction = FindDirection(0);
-            transform.position += direction * movementFactor * Time.deltaTime;
+            direction = FindDirection(0);
         }
+        //This clamps the camera and prevents it from moving too far in any direction.
+        Vector3 newPos = new Vector3(
+                Mathf.Clamp(transform.position.x + direction.x * movementFactor * Time.deltaTime, -100f, 140f),
+                transform.position.y,
+                Mathf.Clamp(transform.position.z + direction.z * movementFactor * Time.deltaTime, -140f, 25f));
+        transform.position = newPos;
     }
 
     Vector3 FindDirection(float angle)
@@ -76,11 +78,11 @@ public class CameraMover : MonoBehaviour
 
     private void ZoomCamera()
     {
-        if (Input.GetAxis("ScrollWheel") > 0)
+        if (Input.GetAxis("ScrollWheel") > 0 && transform.position.y > 15)
         {
             transform.position += transform.forward * zoomFactor * Time.deltaTime;
         }
-        if (Input.GetAxis("ScrollWheel") < 0)
+        if (Input.GetAxis("ScrollWheel") < 0 && transform.position.y < 125)
         {
             transform.position -= transform.forward * zoomFactor * Time.deltaTime;
         }
