@@ -24,6 +24,7 @@ public class Tower : MonoBehaviour
     [SerializeField] GameObject stillFace;
     [SerializeField] GameObject shootingFace;
     [SerializeField] GameObject bulletPrefab;
+    [SerializeField] float fireRate = .5f;
 
     List<EnemyProperties> enemyList = new List<EnemyProperties>();
     ParticleSystem particles;
@@ -147,7 +148,7 @@ public class Tower : MonoBehaviour
             EnableShootingFace();
             yield return new WaitForSeconds(.25f);
             EnableStillFace();
-            yield return new WaitForSeconds(.25f);
+            yield return new WaitForSeconds(fireRate);
         }
     }
 

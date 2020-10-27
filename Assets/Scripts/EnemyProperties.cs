@@ -11,6 +11,7 @@ public class EnemyProperties : MonoBehaviour
 
     [SerializeField] ParticleSystem hitParticles;
     [SerializeField] ParticleSystem deathParticlePrefab;
+    [SerializeField] int moneyValue = 25;
     //[SerializeField] AudioClip hitSfx;
     //[SerializeField] AudioClip deathSoundFx;
     //[SerializeField] ParticleSystem goalParticles;
@@ -54,7 +55,7 @@ public class EnemyProperties : MonoBehaviour
     {
         enemies.getEnemies().Remove(this);
         enemies.deadEnemies++;
-        enemies.GivePlayerMoney();
+        enemies.GivePlayerMoney(moneyValue);
         ParticleSystem deathFx = PlayDeathEffects();
         Destroy(deathFx.gameObject, deathFx.main.duration);
         Destroy(gameObject);

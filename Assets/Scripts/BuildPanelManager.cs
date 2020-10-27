@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class BuildPanelManager : MonoBehaviour
 {
     Button button;
+    Text buttonText;
     RectTransform rect;
     Vector3 downPos;
     Vector3 upPos;
@@ -17,6 +18,8 @@ public class BuildPanelManager : MonoBehaviour
     {
         button = GetComponentInChildren<Button>();
         button.onClick.AddListener(ActivatePanel);
+        buttonText = button.GetComponentInChildren<Text>();
+        buttonText.text = "Build Panel " + "\u25B2".ToString();
         rect = GetComponent<RectTransform>();
         downPos = rect.localPosition;
         upPos = new Vector3(rect.localPosition.x, -120, rect.localPosition.z);
@@ -33,11 +36,13 @@ public class BuildPanelManager : MonoBehaviour
         {
             StartCoroutine(MovePanel(downPos, upPos));
             isActivated = true;
+            buttonText.text = "Build Panel " + "\u25BC".ToString();
         }
         else
         {
             StartCoroutine(MovePanel(upPos, downPos));
             isActivated = false;
+            buttonText.text = "Build Panel " + "\u25B2".ToString();
         }
     }
 

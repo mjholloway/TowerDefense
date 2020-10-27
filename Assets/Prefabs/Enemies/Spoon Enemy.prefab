@@ -63,7 +63,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4531ad794497f3a49aac73b22250fbc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitsLeft: 10
+  hitsLeft: 3
   waypointIndex: 0
   hitParticles: {fileID: 8082365979136247183}
   deathParticlePrefab: {fileID: 198537984209914932, guid: 1a51bfda454239a41afb7dee687c6ac0,
