@@ -134,6 +134,7 @@ public class Tower : MonoBehaviour
             if (coroutine != null)
             {
                 StopCoroutine(coroutine);
+                EnableStillFace();
             }
         }
 

@@ -20,7 +20,7 @@ public class UnplacedTower : MonoBehaviour
     {
         tower = GetComponent<Tower>();
         InitializePlacementMode();
-
+        PanelManager.DeactivatePanel();
     }
 
     //disable tower functionality, disable particle emissions, disable box colliders, and set transparent placement color
