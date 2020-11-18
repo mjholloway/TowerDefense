@@ -24,19 +24,19 @@ public class CameraMover : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W))
         {
-            direction = FindDirection(90);
+            direction += FindDirection(90);
         }
         if (Input.GetKey(KeyCode.A))
         {
-            direction = FindDirection(180);
+            direction += FindDirection(180);
         }
         if (Input.GetKey(KeyCode.S))
         {
-            direction = FindDirection(270);
+            direction += FindDirection(270);
         }
         if (Input.GetKey(KeyCode.D))
         {
-            direction = FindDirection(0);
+            direction += FindDirection(0);
         }
         //This clamps the camera and prevents it from moving too far in any direction.
         Vector3 newPos = new Vector3(
