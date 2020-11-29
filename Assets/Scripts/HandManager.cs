@@ -11,11 +11,13 @@ public class HandManager : MonoBehaviour
     [SerializeField] RawImage card;
     [SerializeField] GameObject deckObject;
     [SerializeField] float cardSpacing = 90f;
+    [SerializeField] RectTransform lookAt;
     
     List<RawImage> deck = new List<RawImage>();
     List<RawImage> cards = new List<RawImage>();
     List<RectTransform> hand = new List<RectTransform>();
     int cardsInHand = 0;
+    float cardWidth = 260f;
 
     private void Start()
     {
@@ -27,78 +29,92 @@ public class HandManager : MonoBehaviour
     {
         int currentHandSize = cardsInHand;
 
+        // Add cards to hand list. TODO: Make sure only 5 (or however many cards) are dealt from deck.
         foreach (RawImage card in deck)
         {
             hand.Add(card.GetComponent<RectTransform>());
         }
 
+        // The goal here is to iterate through each card item in the hand, calculate the width of the hand, and then iterate again using a for loop to set the
+        // positions and rotations of the cards step by step to create the appearance of cards being dealt as opposed to all the cards appearing in their 
+        // designated positions.
         foreach (RectTransform card in hand)
         {
             currentHandSize++;
             float handWidth = CalcHandWidth(currentHandSize);
             for (int cardNum = 0; cardNum < currentHandSize; cardNum++)
             {
-                float cardPos = calcPosition(cardNum, handWidth, currentHandSize);
-                hand[cardNum].anchoredPosition = new Vector2(cardPos, 0);
+                SetPosition(currentHandSize, handWidth, cardNum);
+                //float displacement;
+                //if (currentHandSize % 2 == 0)
+                //{
+                //    if ( cardNum < currentHandSize / 2)
+                //    {
+
+                //    }
+                //}
+                SetRotation(currentHandSize, cardNum);
             }
             yield return new WaitForSeconds(.25f);
         }
 
-
-        //hand[0].anchoredPosition = gameObject.transform.GetComponent<RectTransform>().pivot;
-        //yield return new WaitForSeconds(.25f);
-        //hand[1].anchoredPosition = gameObject.transform.GetComponent<RectTransform>().pivot;
-        //hand[0].anchoredPosition = new Vector2(-100f, hand[0].anchoredPosition.y);
-        //hand[0].Rotate(0, 0, 4);
-        //hand[1].anchoredPosition = new Vector2(100f, hand[1].anchoredPosition.y);
-        //hand[1].Rotate(0, 0, -4);
-        //yield return new WaitForSeconds(.25f);
-
-        //hand[2].anchoredPosition = gameObject.transform.GetComponent<RectTransform>().pivot;
-        //hand[0].anchoredPosition = new Vector2(-215f, -14f);
-        //hand[0].Rotate(0, 0, 4);
-        //hand[1].anchoredPosition = gameObject.transform.GetComponent<RectTransform>().pivot;
-        //hand[1].Rotate(0, 0, 4);
-        //hand[2].anchoredPosition = new Vector2(215f, -14f);
-        //hand[2].Rotate(0, 0, -8);
-        //yield return new WaitForSeconds(.25f);
-
-        //hand[3].anchoredPosition = hand[2].anchoredPosition;
-        //hand[0].anchoredPosition = new Vector2(-315f, -25f);
-        //hand[0].Rotate(0, 0, 2);
-        //hand[1].anchoredPosition = new Vector2(-100f, hand[1].anchoredPosition.y);
-        //hand[1].Rotate(0, 0, 4);
-        //hand[2].anchoredPosition = new Vector2(100f, hand[1].anchoredPosition.y);
-        //hand[2].Rotate(0, 0, 4);
-        //hand[3].anchoredPosition = new Vector2(315f, -25f);
-        //hand[3].Rotate(0, 0, -10);
-        //yield return new WaitForSeconds(.25f);
-
-        
-
-
     }
 
-    // 260 is width of cards, I should code that in as a var later. 90 is the spacing between the cards. Also add that in later probs.
+    // Calculates the width of the hand based on how many cards are in the hand and the width of the cards, but subtracts the overlap of the cards.
     private float CalcHandWidth(int currentHandSizeArg)
     {
-        return (260 * currentHandSizeArg) - (90 * (currentHandSizeArg - 1));
+        return (cardWidth * currentHandSizeArg) - (cardSpacing * (currentHandSizeArg - 1));
     }
 
-    private float calcPosition(int currentCard, float handWidthArg, int currentHandSizeArg)
+    private void SetPosition(int currentHandSize, float handWidth, int cardNum)
     {
+        float cardPos = CalcPosition(cardNum, handWidth, currentHandSize);
+        hand[cardNum].anchoredPosition = new Vector2(cardPos, 0);
+    }
+
+    private void SetRotation(int currentHandSize, int cardNum)
+    {
+        float rotation;
+        // Rotation should be negative if the card is to the right of center.
+        if ((cardNum + 1) > currentHandSize / 2)
+        {
+            rotation = -CalcCardAngle(hand[cardNum]);
+        }
+        else
+        {
+            rotation = CalcCardAngle(hand[cardNum]);
+        }
+        hand[cardNum].rotation = Quaternion.Euler(0, 0, rotation);
+    }
+
+    // Calculates where each card should be placed based on the width of the cards, the given spacing, and how many cards are in the hand.
+    private float CalcPosition(int currentCard, float handWidthArg, int currentHandSizeArg)
+    {
+        // The first card will always border the left edge.
         if (currentCard == 0)
         {
             return -((handWidthArg / 2) - 130);
         }
+        // The last card will always border the right edge.
         else if (currentCard == currentHandSizeArg)
         {
             return (handWidthArg / 2) + 130;
         }
+        // Otherwise the card will be placed a set distance from the previous card. This will equal the distance between the center of the first card
+        // and the edge of the next card plus the distance to the center of the next card.
         else
         {
-            return hand[currentCard - 1].anchoredPosition.x + 170;
+            float distance = ((cardWidth / 2) - cardSpacing) + (cardWidth / 2); 
+            return hand[currentCard - 1].anchoredPosition.x + distance;
         }
     }
 
+    // Form a right triangle between the center of the card and the "lookAt" point that is placed below the screen. Uses inverse sine with the opposite side
+    // over the hypotenuse to find the angle that would point the card at the point.
+    private float CalcCardAngle(RectTransform cardArg)
+    {
+        float hypotenuse = Vector2.Distance(cardArg.anchoredPosition, lookAt.anchoredPosition);
+        float opposite = Mathf.Abs(cardArg.anchoredPosition.x - lookAt.anchoredPosition.x);
+        return Mathf.Asin(opposite / hypotenuse) * 180 / Mathf.PI;
+    }
 }
