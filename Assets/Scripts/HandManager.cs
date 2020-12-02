@@ -7,33 +7,36 @@ using UnityEngine.UI;
 
 public class HandManager : MonoBehaviour
 {
-    // TODO: Make it deal 5 cards at start, add cards to the hand object and eventually remove the hand list.
     [SerializeField] int handSize = 5;
-    [SerializeField] RawImage card;
     [SerializeField] GameObject deckObject;
     [SerializeField] float cardSpacing = 90f;
     [SerializeField] RectTransform lookAt;
     [SerializeField] float verticalDisplacementMultiplier = 15f;
-    [SerializeField] RectTransform handObject;
     
-    List<RawImage> deck = new List<RawImage>();
+    RectTransform handObject;
+    Queue<RawImage> deck;
     List<RectTransform> hand = new List<RectTransform>();
     int cardsInHand = 0;
     float cardWidth = 260f;
 
     private void Start()
     {
-        deck = deckObject.GetComponentsInChildren<RawImage>().ToList();
-        StartCoroutine(DealHand());
+        handObject = GetComponent<RectTransform>();
+        deck = new Queue<RawImage>(deckObject.GetComponentsInChildren<RawImage>());
+        StartCoroutine(DealHand(5));
     }
 
-    private IEnumerator DealHand()
+    private IEnumerator DealHand(int cardsToDeal)
     {
         int currentHandSize = cardsInHand;
 
-        // Add cards to hand list. TODO: Make sure only 5 (or however many cards) are dealt from deck.
-        foreach (RawImage card in deck)
+        int dealValue = Mathf.Min(cardsToDeal, deck.Count); // This should eventually be removed and replaced (discard should be shuffled for new deck)!!!!
+
+        // Add cards to hand.
+        for (int i = 0; i < dealValue; i++)
         {
+            var card = deck.Dequeue();
+            card.rectTransform.SetParent(handObject.transform, true);
             hand.Add(card.GetComponent<RectTransform>());
         }
 
