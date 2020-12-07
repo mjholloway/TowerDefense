@@ -28,8 +28,9 @@ public class HandManager : MonoBehaviour
 
     private IEnumerator DealHand(int cardsToDeal)
     {
-        int currentHandSize = cardsInHand;
+        CardHandler.isSelectable = false;
 
+        int currentHandSize = cardsInHand;
         int dealValue = Mathf.Min(cardsToDeal, deck.Count); // This should eventually be removed and replaced (discard should be shuffled for new deck)!!!!
 
         // Add cards to hand.
@@ -57,7 +58,7 @@ public class HandManager : MonoBehaviour
         }
 
         cardsInHand = currentHandSize;
-
+        CardHandler.isSelectable = true;
     }
 
     // Okay, so here I'm trying to set the vertical displacement of the cards so that they will be farther down the farther they are from the center of the hand.
