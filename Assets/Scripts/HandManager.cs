@@ -18,6 +18,7 @@ public class HandManager : MonoBehaviour
     List<RectTransform> hand = new List<RectTransform>();
     int cardsInHand = 0;
     float cardWidth = 260f;
+    Coroutine coroutine;
 
     private void Start()
     {
@@ -28,6 +29,7 @@ public class HandManager : MonoBehaviour
 
     private IEnumerator DealHand(int cardsToDeal)
     {
+        
         CardHandler.isSelectable = false;
 
         int currentHandSize = cardsInHand;
@@ -50,19 +52,41 @@ public class HandManager : MonoBehaviour
             float handWidth = CalcHandWidth(currentHandSize);
             for (int cardNum = 0; cardNum < currentHandSize; cardNum++)
             {
-                SetPosition(currentHandSize, handWidth, cardNum);
-                SetDisplacement(currentHandSize, cardNum);
-                SetRotation(currentHandSize, cardNum);
+                float xPos = SetPosition(currentHandSize, handWidth, cardNum);
+                float yPos = SetDisplacement(currentHandSize, cardNum);
+                float rotation = SetRotation(currentHandSize, cardNum);
+                coroutine = StartCoroutine(MoveCard(cardNum, xPos, yPos, rotation));
+                //StartCoroutine(RotateCard) <-- do this
             }
-            yield return new WaitForSeconds(.25f);
+            yield return coroutine;
         }
 
         cardsInHand = currentHandSize;
         CardHandler.isSelectable = true;
     }
 
+    // Calculates the width of the hand based on how many cards are in the hand and the width of the cards, but subtracts the overlap of the cards.
+    private float CalcHandWidth(int currentHandSizeArg)
+    {
+        return (cardWidth * currentHandSizeArg) - (cardSpacing * (currentHandSizeArg - 1));
+    }
+
+    private float SetPosition(int currentHandSize, float handWidth, int cardNum)
+    {
+        float cardPos = CalcPosition(cardNum, handWidth, currentHandSize);
+        return cardPos;
+    }
+
+    // Calculates where each card should be placed based on the distance from the left bound (half the calculated width of the hand).
+    private float CalcPosition(int currentCard, float handWidthArg, int currentHandSizeArg)
+    {
+        float leftBound = -((handWidthArg / 2) - 130);
+        float distance = ((cardWidth / 2) - cardSpacing) + (cardWidth / 2);
+        return leftBound + (distance * currentCard);
+    }
+
     // Okay, so here I'm trying to set the vertical displacement of the cards so that they will be farther down the farther they are from the center of the hand.
-    private void SetDisplacement(int currentHandSize, int cardNum)
+    private float SetDisplacement(int currentHandSize, int cardNum)
     {
         float displacementFactor;
         int split = currentHandSize / 2;
@@ -106,22 +130,10 @@ public class HandManager : MonoBehaviour
         // Just for reminder, the multiplier is what I can change from the inspector to get instant changes. The factor is essentially the ratio of card 
         // displacement calculated in the previous step.
         float displacement = verticalDisplacementMultiplier * displacementFactor;
-        hand[cardNum].anchoredPosition = new Vector2(hand[cardNum].anchoredPosition.x, -displacement);
+        return -displacement;
     }
 
-    // Calculates the width of the hand based on how many cards are in the hand and the width of the cards, but subtracts the overlap of the cards.
-    private float CalcHandWidth(int currentHandSizeArg)
-    {
-        return (cardWidth * currentHandSizeArg) - (cardSpacing * (currentHandSizeArg - 1));
-    }
-
-    private void SetPosition(int currentHandSize, float handWidth, int cardNum)
-    {
-        float cardPos = CalcPosition(cardNum, handWidth, currentHandSize);
-        hand[cardNum].anchoredPosition = new Vector2(cardPos, 0);
-    }
-
-    private void SetRotation(int currentHandSize, int cardNum)
+    private float SetRotation(int currentHandSize, int cardNum)
     {
         float rotation;
         // Rotation should be negative if the card is to the right of center.
@@ -133,30 +145,9 @@ public class HandManager : MonoBehaviour
         {
             rotation = CalcCardAngle(hand[cardNum]);
         }
-        hand[cardNum].rotation = Quaternion.Euler(0, 0, rotation);
+        return rotation;
     }
 
-    // Calculates where each card should be placed based on the width of the cards, the given spacing, and how many cards are in the hand.
-    private float CalcPosition(int currentCard, float handWidthArg, int currentHandSizeArg)
-    {
-        // The first card will always border the left edge.
-        if (currentCard == 0)
-        {
-            return -((handWidthArg / 2) - 130);
-        }
-        // The last card will always border the right edge.
-        else if (currentCard == currentHandSizeArg)
-        {
-            return (handWidthArg / 2) + 130;
-        }
-        // Otherwise the card will be placed a set distance from the previous card. This will equal the distance between the center of the first card
-        // and the edge of the next card plus the distance to the center of the next card.
-        else
-        {
-            float distance = ((cardWidth / 2) - cardSpacing) + (cardWidth / 2); 
-            return hand[currentCard - 1].anchoredPosition.x + distance;
-        }
-    }
 
     // Form a right triangle between the center of the card and the "lookAt" point that is placed below the screen. Uses inverse sine with the opposite side
     // over the hypotenuse to find the angle that would point the card at the point.
@@ -165,5 +156,21 @@ public class HandManager : MonoBehaviour
         float hypotenuse = Vector2.Distance(cardArg.anchoredPosition, lookAt.anchoredPosition);
         float opposite = Mathf.Abs(cardArg.anchoredPosition.x - lookAt.anchoredPosition.x);
         return Mathf.Asin(opposite / hypotenuse) * 180 / Mathf.PI;
+    }
+
+    private IEnumerator MoveCard(int cardNum, float xPos, float yPos, float rotation)
+    {
+        Vector2 velocity = new Vector2(0f, 0f);
+        float passedTime = 0f;
+        float targetTime = .25f;
+        Vector2 target = new Vector2(xPos, yPos);
+        while (passedTime < targetTime)
+        {
+            Vector2 intermediate = Vector2.SmoothDamp(hand[cardNum].anchoredPosition, target, ref velocity, targetTime);
+            hand[cardNum].anchoredPosition = intermediate;
+            passedTime += Time.deltaTime;
+            yield return null;
+        }
+        hand[cardNum].anchoredPosition = target;
     }
 }
