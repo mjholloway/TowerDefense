@@ -50,13 +50,13 @@ public class HandManager : MonoBehaviour
         {
             currentHandSize++;
             float handWidth = CalcHandWidth(currentHandSize);
+            gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(handWidth, 420);
             for (int cardNum = 0; cardNum < currentHandSize; cardNum++)
             {
                 float xPos = SetPosition(currentHandSize, handWidth, cardNum);
                 float yPos = SetDisplacement(currentHandSize, cardNum);
-                float rotation = SetRotation(currentHandSize, cardNum);
+                float rotation = SetRotation(currentHandSize, cardNum, new Vector2(xPos, yPos));
                 coroutine = StartCoroutine(MoveCard(cardNum, xPos, yPos, rotation));
-                //StartCoroutine(RotateCard) <-- do this
             }
             yield return coroutine;
         }
@@ -133,17 +133,17 @@ public class HandManager : MonoBehaviour
         return -displacement;
     }
 
-    private float SetRotation(int currentHandSize, int cardNum)
+    private float SetRotation(int currentHandSize, int cardNum, Vector2 cardPos)
     {
         float rotation;
         // Rotation should be negative if the card is to the right of center.
         if ((cardNum + 1) > currentHandSize / 2)
         {
-            rotation = -CalcCardAngle(hand[cardNum]);
+            rotation = -CalcCardAngle(cardPos);
         }
         else
         {
-            rotation = CalcCardAngle(hand[cardNum]);
+            rotation = CalcCardAngle(cardPos);
         }
         return rotation;
     }
@@ -151,26 +151,33 @@ public class HandManager : MonoBehaviour
 
     // Form a right triangle between the center of the card and the "lookAt" point that is placed below the screen. Uses inverse sine with the opposite side
     // over the hypotenuse to find the angle that would point the card at the point.
-    private float CalcCardAngle(RectTransform cardArg)
+    private float CalcCardAngle(Vector2 cardPos)
     {
-        float hypotenuse = Vector2.Distance(cardArg.anchoredPosition, lookAt.anchoredPosition);
-        float opposite = Mathf.Abs(cardArg.anchoredPosition.x - lookAt.anchoredPosition.x);
+        float hypotenuse = Vector2.Distance(cardPos, lookAt.anchoredPosition);
+        float opposite = Mathf.Abs(cardPos.x - lookAt.anchoredPosition.x);
         return Mathf.Asin(opposite / hypotenuse) * 180 / Mathf.PI;
     }
 
+    // Moves and rotates the card into position smoothly (or at least more smooth than it would be otherwise)
     private IEnumerator MoveCard(int cardNum, float xPos, float yPos, float rotation)
     {
-        Vector2 velocity = new Vector2(0f, 0f);
+        Vector2 moveVelocity = new Vector2(0f, 0f);
+        float rotVelocity = 0f;
         float passedTime = 0f;
-        float targetTime = .25f;
-        Vector2 target = new Vector2(xPos, yPos);
-        while (passedTime < targetTime)
+        float targetTime = .1f;
+        Vector2 targetPos = new Vector2(xPos, yPos);
+        while (passedTime < .3f)
         {
-            Vector2 intermediate = Vector2.SmoothDamp(hand[cardNum].anchoredPosition, target, ref velocity, targetTime);
-            hand[cardNum].anchoredPosition = intermediate;
+            Vector2 intermediatePos = Vector2.SmoothDamp(hand[cardNum].anchoredPosition, targetPos, ref moveVelocity, targetTime);
+            hand[cardNum].anchoredPosition = intermediatePos;
+
+            float intermediateRot = Mathf.SmoothDampAngle(hand[cardNum].rotation.eulerAngles.z, rotation, ref rotVelocity, targetTime);
+            hand[cardNum].rotation = Quaternion.Euler(0, 0, intermediateRot);
+
             passedTime += Time.deltaTime;
             yield return null;
         }
-        hand[cardNum].anchoredPosition = target;
+        hand[cardNum].anchoredPosition = targetPos;
+        hand[cardNum].rotation = Quaternion.Euler(0, 0, rotation);
     }
 }
