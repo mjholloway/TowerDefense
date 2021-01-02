@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class HandManager : MonoBehaviour
 {
+    public static bool isDealing = false;
+
     [SerializeField] int handSize = 5;
     [SerializeField] GameObject deckObject;
     [SerializeField] float cardSpacing = 90f;
@@ -19,19 +21,22 @@ public class HandManager : MonoBehaviour
     int cardsInHand = 0;
     float cardWidth = 260f;
     Coroutine coroutine;
+    CardMover cardMover;
 
     private void Start()
     {
         handObject = GetComponent<RectTransform>();
         deck = new Queue<RawImage>(deckObject.GetComponentsInChildren<RawImage>());
+        cardMover = GetComponent<CardMover>();
         StartCoroutine(DealHand(5));
     }
 
     private IEnumerator DealHand(int cardsToDeal)
     {
-        
+        isDealing = true;
         CardHandler.isSelectable = false;
 
+        int targetHandSize = cardsInHand + cardsToDeal;
         int currentHandSize = cardsInHand;
         int dealValue = Mathf.Min(cardsToDeal, deck.Count); // This should eventually be removed and replaced (discard should be shuffled for new deck)!!!!
 
@@ -46,22 +51,23 @@ public class HandManager : MonoBehaviour
         // The goal here is to iterate through each card item in the hand, calculate the width of the hand, and then iterate again using a for loop to set the
         // positions and rotations of the cards step by step to create the appearance of cards being dealt as opposed to all the cards appearing in their 
         // designated positions.
-        foreach (RectTransform card in hand)
+        for (; currentHandSize <= targetHandSize; currentHandSize++)
         {
-            currentHandSize++;
             float handWidth = CalcHandWidth(currentHandSize);
             gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(handWidth, 420);
             for (int cardNum = 0; cardNum < currentHandSize; cardNum++)
             {
-                float xPos = SetPosition(currentHandSize, handWidth, cardNum);
-                float yPos = SetDisplacement(currentHandSize, cardNum);
-                float rotation = SetRotation(currentHandSize, cardNum, new Vector2(xPos, yPos));
-                coroutine = StartCoroutine(MoveCard(cardNum, xPos, yPos, rotation));
+                float xPos = CalcPosition(cardNum, handWidth);
+                float yPos = CalcDisplacement(currentHandSize, cardNum);
+                float rotation = GetRotation(currentHandSize, cardNum, new Vector2(xPos, yPos));
+                hand[cardNum].GetComponent<CardHandler>().SetProperties(Quaternion.Euler(0, 0, rotation), new Vector2(xPos, yPos));
+                coroutine = cardMover.DealCard(hand[cardNum], new Vector3(0, 0, rotation), new Vector2(xPos, yPos), new Vector3(1, 1, 1), .1f, .3f);
             }
             yield return coroutine;
         }
 
-        cardsInHand = currentHandSize;
+        cardsInHand = currentHandSize - 1;
+        isDealing = false;
         CardHandler.isSelectable = true;
     }
 
@@ -71,14 +77,8 @@ public class HandManager : MonoBehaviour
         return (cardWidth * currentHandSizeArg) - (cardSpacing * (currentHandSizeArg - 1));
     }
 
-    private float SetPosition(int currentHandSize, float handWidth, int cardNum)
-    {
-        float cardPos = CalcPosition(cardNum, handWidth, currentHandSize);
-        return cardPos;
-    }
-
     // Calculates where each card should be placed based on the distance from the left bound (half the calculated width of the hand).
-    private float CalcPosition(int currentCard, float handWidthArg, int currentHandSizeArg)
+    private float CalcPosition(int currentCard, float handWidthArg)
     {
         float leftBound = -((handWidthArg / 2) - 130);
         float distance = ((cardWidth / 2) - cardSpacing) + (cardWidth / 2);
@@ -86,7 +86,7 @@ public class HandManager : MonoBehaviour
     }
 
     // Okay, so here I'm trying to set the vertical displacement of the cards so that they will be farther down the farther they are from the center of the hand.
-    private float SetDisplacement(int currentHandSize, int cardNum)
+    private float CalcDisplacement(int currentHandSize, int cardNum)
     {
         float displacementFactor;
         int split = currentHandSize / 2;
@@ -133,7 +133,7 @@ public class HandManager : MonoBehaviour
         return -displacement;
     }
 
-    private float SetRotation(int currentHandSize, int cardNum, Vector2 cardPos)
+    private float GetRotation(int currentHandSize, int cardNum, Vector2 cardPos)
     {
         float rotation;
         // Rotation should be negative if the card is to the right of center.
@@ -158,26 +158,23 @@ public class HandManager : MonoBehaviour
         return Mathf.Asin(opposite / hypotenuse) * 180 / Mathf.PI;
     }
 
-    // Moves and rotates the card into position smoothly (or at least more smooth than it would be otherwise)
-    private IEnumerator MoveCard(int cardNum, float xPos, float yPos, float rotation)
+    public int GetHandSize()
     {
-        Vector2 moveVelocity = new Vector2(0f, 0f);
-        float rotVelocity = 0f;
-        float passedTime = 0f;
-        float targetTime = .1f;
-        Vector2 targetPos = new Vector2(xPos, yPos);
-        while (passedTime < .3f)
-        {
-            Vector2 intermediatePos = Vector2.SmoothDamp(hand[cardNum].anchoredPosition, targetPos, ref moveVelocity, targetTime);
-            hand[cardNum].anchoredPosition = intermediatePos;
+        return cardsInHand;
+    }
 
-            float intermediateRot = Mathf.SmoothDampAngle(hand[cardNum].rotation.eulerAngles.z, rotation, ref rotVelocity, targetTime);
-            hand[cardNum].rotation = Quaternion.Euler(0, 0, intermediateRot);
+    public int GetCardIndex(RectTransform card)
+    {
+        return hand.IndexOf(card.GetComponent<RectTransform>());
+    }
 
-            passedTime += Time.deltaTime;
-            yield return null;
-        }
-        hand[cardNum].anchoredPosition = targetPos;
-        hand[cardNum].rotation = Quaternion.Euler(0, 0, rotation);
+    public RectTransform GetShiftValues(int currentIndex, out Vector3 rotation, out Vector2 position)
+    {
+        float handWidth = handObject.rect.width;
+        
+        position = new Vector2(CalcPosition(currentIndex, handWidth), CalcDisplacement(cardsInHand, currentIndex));
+        rotation = new Vector3(0, 0, GetRotation(cardsInHand, currentIndex, position));
+
+        return hand[currentIndex];
     }
 }
