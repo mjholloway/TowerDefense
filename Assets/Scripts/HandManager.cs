@@ -7,10 +7,9 @@ using UnityEngine.UI;
 
 public class HandManager : MonoBehaviour
 {
-    public static bool isDealing = false;
-
     [SerializeField] int handSize = 5;
     [SerializeField] GameObject deckObject;
+    [SerializeField] GameObject discardObject;
     [SerializeField] float cardSpacing = 90f;
     [SerializeField] RectTransform lookAt;
     [SerializeField] float verticalDisplacementMultiplier = 15f;
@@ -28,12 +27,11 @@ public class HandManager : MonoBehaviour
         handObject = GetComponent<RectTransform>();
         deck = new Queue<RawImage>(deckObject.GetComponentsInChildren<RawImage>());
         cardMover = GetComponent<CardMover>();
-        StartCoroutine(DealHand(5));
+        StartCoroutine(DealHand(handSize));
     }
 
     private IEnumerator DealHand(int cardsToDeal)
     {
-        isDealing = true;
         CardHandler.isSelectable = false;
 
         int targetHandSize = cardsInHand + cardsToDeal;
@@ -54,20 +52,21 @@ public class HandManager : MonoBehaviour
         for (; currentHandSize <= targetHandSize; currentHandSize++)
         {
             float handWidth = CalcHandWidth(currentHandSize);
-            gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(handWidth, 420);
+            GetComponent<RectTransform>().sizeDelta = new Vector2(handWidth, 420);
             for (int cardNum = 0; cardNum < currentHandSize; cardNum++)
             {
-                float xPos = CalcPosition(cardNum, handWidth);
-                float yPos = CalcDisplacement(currentHandSize, cardNum);
-                float rotation = GetRotation(currentHandSize, cardNum, new Vector2(xPos, yPos));
-                hand[cardNum].GetComponent<CardHandler>().SetProperties(Quaternion.Euler(0, 0, rotation), new Vector2(xPos, yPos));
-                coroutine = cardMover.DealCard(hand[cardNum], new Vector3(0, 0, rotation), new Vector2(xPos, yPos), new Vector3(1, 1, 1), .1f, .3f);
+                RectTransform card = hand[cardNum];
+                CardHandler cardHandler = card.GetComponent<CardHandler>();
+                Vector2 position = new Vector2(CalcPosition(cardNum, handWidth), CalcDisplacement(currentHandSize, cardNum));
+                Vector3 rotation = GetRotation(currentHandSize, cardNum, position);
+                cardHandler.SetProperties(Quaternion.Euler(rotation), position, cardNum);
+                cardHandler.SetParents(deckObject, gameObject, discardObject);
+                coroutine = cardMover.DealCard(card, rotation, position, new Vector3(1, 1, 1), .1f, .3f);
             }
             yield return coroutine;
         }
 
         cardsInHand = currentHandSize - 1;
-        isDealing = false;
         CardHandler.isSelectable = true;
     }
 
@@ -133,7 +132,8 @@ public class HandManager : MonoBehaviour
         return -displacement;
     }
 
-    private float GetRotation(int currentHandSize, int cardNum, Vector2 cardPos)
+    //The naming convention is different for this function since the actual angle calculation is done in another function, but this one returns the proper rotation.
+    private Vector3 GetRotation(int currentHandSize, int cardNum, Vector2 cardPos)
     {
         float rotation;
         // Rotation should be negative if the card is to the right of center.
@@ -145,7 +145,7 @@ public class HandManager : MonoBehaviour
         {
             rotation = CalcCardAngle(cardPos);
         }
-        return rotation;
+        return new Vector3(0, 0, rotation);
     }
 
 
@@ -168,13 +168,23 @@ public class HandManager : MonoBehaviour
         return hand.IndexOf(card.GetComponent<RectTransform>());
     }
 
+    // Function is called from CardMover when a card is magnified and other cards need to be moved out of the way. It calculates the position and rotation of the
+    // card based on its placement in the hand list by calling the previous calculation functions in this class.
     public RectTransform GetShiftValues(int currentIndex, out Vector3 rotation, out Vector2 position)
     {
         float handWidth = handObject.rect.width;
         
         position = new Vector2(CalcPosition(currentIndex, handWidth), CalcDisplacement(cardsInHand, currentIndex));
-        rotation = new Vector3(0, 0, GetRotation(cardsInHand, currentIndex, position));
+        rotation = GetRotation(cardsInHand, currentIndex, position);
 
         return hand[currentIndex];
+    }
+
+    // Used when a card is removed from hand, will remove it from the hand list, augment cardsinhand variable, and alter the size of the handobject.
+    public void RemoveCard(RectTransform card)
+    {
+        hand.Remove(card);
+        cardsInHand--;
+        GetComponent<RectTransform>().sizeDelta = new Vector2(CalcHandWidth(cardsInHand), 420);
     }
 }

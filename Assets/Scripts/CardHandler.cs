@@ -10,6 +10,7 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 {
     public static bool isSelectable = true;
     public bool isMagnified = false;
+    public bool isInHand = false;
 
     [SerializeField] float verticalMagnificationDisplacement = 150f;
     [SerializeField] float scaleFactor = 1.25f;
@@ -20,7 +21,10 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     Vector3 startScale = new Vector3(1f, 1f, 1f);
     int startIndex;
     bool isSelected = false;
-    Coroutine coroutine;
+    Coroutine thisCardCoroutine;
+    GameObject deck;
+    GameObject hand;
+    GameObject discard;
 
 
     private void Start()
@@ -30,22 +34,31 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void Update()
     {
-        if (isSelected)
+        if (isSelected)     // Card will stay at mouse position after it is selected.
         {
             transform.position = Input.mousePosition;
-            isSelectable = false;
         }
     }
 
-    public void SetProperties(Quaternion rotationCalc, Vector2 positionCalc)
+    // This is called in HandManager when the card is dealt to store its position and rotation and index, as well as when cards are played/discarded.
+    public void SetProperties(Quaternion rotationCalc, Vector2 positionCalc, int index)
     {
         startRotation = rotationCalc;
         startPosition = positionCalc;
+        startIndex = index;
+        isInHand = true;
+    }
+    
+    public void SetParents(GameObject deckObject, GameObject handObject, GameObject discardObject)
+    {
+        deck = deckObject;
+        hand = handObject;
+        discard = discardObject;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (isSelectable)
+        if (isSelectable && isInHand)
         {
             MagnifyCard();
         }
@@ -53,76 +66,65 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (!HandManager.isDealing)
+        if (isSelectable && isInHand)
         {
             Demagnify();
         }
     }
-
+    
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (isSelectable)
+        // Will return card to hand if clicked in hand area, otherwise will move card to discard (later will play card)
+        if (isSelected)
         {
+            RectTransform handRect = hand.GetComponent<RectTransform>();
+            Vector2 localPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(handRect, Input.mousePosition, null, out localPos);
+            if (handRect.rect.Contains(localPos))
+            {
+                isSelected = false;
+                isSelectable = true;
+                Demagnify();
+            }
+            else
+            {
+                isMagnified = false;
+                isSelected = false;
+                isSelectable = true;
+                isInHand = false;
+                hand.GetComponent<HandManager>().RemoveCard(rectTransform);
+                discard.GetComponent<DiscardManager>().DiscardCard(rectTransform);
+            }
+        }
+        else if (isSelectable)
+        {
+            hand.GetComponent<CardMover>().StopCard(thisCardCoroutine); // This seems unnecessary but it prevents the "coroutine continue failure" from appearing
             isSelected = true;
+            isSelectable = false;
         }
     }
 
+    // Calls CardMover to magnify the hovered card to target position and move others away.
     private void MagnifyCard()
     {
-        //if (coroutine != null)
-        //{
-        //    StopCoroutine(coroutine);
-        //}
-
         isMagnified = true;
 
-        startIndex = rectTransform.GetSiblingIndex();
         rectTransform.SetAsLastSibling();
 
         Vector3 targetRot = new Vector3(0, 0, 0);
         Vector2 targetPos = new Vector2(startPosition.x, verticalMagnificationDisplacement);
         Vector3 targetScale = new Vector3(scaleFactor, scaleFactor, 1f);
 
-        GetComponentInParent<CardMover>().MoveCard(rectTransform, targetRot, targetPos, targetScale, .1f, .5f);
+        thisCardCoroutine = hand.GetComponent<CardMover>().MoveCard(rectTransform, targetRot, targetPos, targetScale, .1f, .5f);
     }
 
+    // Calls CardMover to reset the hand and sets the card to proper index in heirarchy.
     private void Demagnify()
     {
-        if (coroutine != null)
-        {
-            StopCoroutine(coroutine);
-        }
-
         isMagnified = false;
 
-        GetComponentInParent<CardMover>().MoveCard(rectTransform, startRotation.eulerAngles, startPosition, startScale, .1f, .5f);
+        hand.GetComponent<CardMover>().MoveCard(rectTransform, startRotation.eulerAngles, startPosition, startScale, .1f, .5f);
         rectTransform.SetSiblingIndex(startIndex);
     }
     
-    //private IEnumerator AdjustCard(Vector3 targetRot, Vector2 targetPos, Vector3 targetScale)
-    //{
-    //    float rotVelocity = 0f;
-    //    Vector2 posVelocity = new Vector2(0f, 0f);
-    //    Vector3 scaleVelocity = new Vector3(0, 0, 0);
-    //    float passedTime = 0f;
-    //    float targetTime = .1f;
-
-    //    while (passedTime < .5f)
-    //    {
-    //        float intermediateRot = Mathf.SmoothDampAngle(rectTransform.eulerAngles.z, targetRot.z, ref rotVelocity, targetTime);
-    //        rectTransform.rotation = Quaternion.Euler(0, 0, intermediateRot);
-
-    //        Vector2 intermediatePos = Vector2.SmoothDamp(rectTransform.anchoredPosition, targetPos, ref posVelocity, targetTime);
-    //        rectTransform.anchoredPosition = intermediatePos;
-
-    //        Vector3 intermediateScale = Vector3.SmoothDamp(rectTransform.localScale, targetScale, ref scaleVelocity, targetTime);
-    //        rectTransform.localScale = intermediateScale;
-
-    //        passedTime += Time.deltaTime;
-    //        yield return null;
-    //    }
-    //    rectTransform.rotation = Quaternion.Euler(targetRot);
-    //    rectTransform.anchoredPosition = targetPos;
-    //    rectTransform.localScale = targetScale;
-    //}
 }
