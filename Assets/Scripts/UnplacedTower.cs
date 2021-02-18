@@ -18,16 +18,15 @@ public class UnplacedTower : MonoBehaviour
 
     void Start()
     {
-        tower = GetComponent<Tower>();
+        //tower = GetComponent<Tower>();
         InitializePlacementMode();
-        PanelManager.DeactivatePanel();
     }
 
     //disable tower functionality, disable particle emissions, disable box colliders, and set transparent placement color
     private void InitializePlacementMode()
     {
-        tower.enabled = false;
-        tower.GetComponent<BoxCollider>().enabled = false;
+        //tower.enabled = false;
+        GetComponent<BoxCollider>().enabled = false;
         towerMeshes = GetComponentsInChildren<MeshRenderer>();
         SetColor(red);
     }
@@ -54,8 +53,8 @@ public class UnplacedTower : MonoBehaviour
     public void ActivateTower(GameObject parent)
     {
         transform.parent = parent.transform;
-        tower.enabled = true;
-        tower.GetComponent<BoxCollider>().enabled = true;
+        //tower.enabled = true;
+        //tower.GetComponent<BoxCollider>().enabled = true;
         SetColor(defaultStrawberry);
         enabled = false;
     }

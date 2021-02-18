@@ -13,7 +13,7 @@ public class NewEnemyMover : MonoBehaviour
     private void Start()
     {
         enemies = GetComponent<EnemySpawner>();
-        StartCoroutine(MoveEnemies());
+        //StartCoroutine(MoveEnemies());
     }
 
     private IEnumerator MoveEnemies()
