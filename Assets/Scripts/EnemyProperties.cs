@@ -24,6 +24,7 @@ public class EnemyProperties : MonoBehaviour
         enemies = GetComponentInParent<EnemySpawner>();
     }
 
+    // Function to deal with taking hits from the turrets.
     private void OnCollisionEnter(Collision collision)
     {
         hitParticles.Play();
@@ -38,19 +39,7 @@ public class EnemyProperties : MonoBehaviour
         Destroy(collision.collider.gameObject);
     }
 
-    //Old code from when I used particles as bullets
-    //private void OnParticleCollision(GameObject other)
-    //{
-    //    hitParticles.Play();
-    //    hitsLeft--;
-    //    GetComponent<AudioSource>().PlayOneShot(hitSfx);
-
-    //    if (hitsLeft == 0)
-    //    {
-    //        ProcessEnemyDeath();
-    //    }
-    //}
-
+    // When the enemy runs out of health this will clean it up and remove it.
     public void ProcessEnemyDeath()
     {
         enemies.getEnemies().Remove(this);
@@ -70,22 +59,8 @@ public class EnemyProperties : MonoBehaviour
         return deathFx;
     }
 
-    public void SetNewLocation()
-    {
-        waypointIndex++;
-        transform.position = Pathfinder.path[waypointIndex].transform.position;
-   
-        if (waypointIndex + 1 == Pathfinder.path.Count)
-        {
-            ProcessReachingGoal();
-        }
-        else
-        {
-            FaceForward();
-        }
-    }
-
-    private void FaceForward()
+    // Makes sure the enemy is rotated to properly be facing the next block
+    public void FaceForward()
     {
         var direction = Pathfinder.path[waypointIndex + 1].transform.position - Pathfinder.path[waypointIndex].transform.position;
         if (direction.x > 0)
@@ -106,13 +81,15 @@ public class EnemyProperties : MonoBehaviour
         }
     }
 
-    private void ProcessReachingGoal()
+    // When the enemy reaches the last block it damages the player base.
+    public void ProcessReachingGoal()
     {
         //AudioSource.PlayClipAtPoint(reachedGoalSfx, new Vector3(23.5f, 80f, -64.1f));
         enemies.DamagePlayer();
         SelfDestruct();
     }
 
+    // Destorys the enemy object when it reaches the player base.
     private void SelfDestruct()
     {
         //ParticleSystem goalFx = Instantiate(goalParticles, transform.position, Quaternion.identity);

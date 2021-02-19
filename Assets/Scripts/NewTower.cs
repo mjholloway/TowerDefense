@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class NewTower : MonoBehaviour
 {
-    [SerializeField] int towerHealth = 50;
+    public int towerHealth = 50;
+
     [SerializeField] HealthBarManager healthBar;
 
     public void ModifyHealth(int change)

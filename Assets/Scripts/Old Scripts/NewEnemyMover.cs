@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class NewEnemyMover : MonoBehaviour
 {
-    [SerializeField] float moveDelay = .5f;
+    /*[SerializeField] float moveDelay = .5f;
 
     EnemySpawner enemies;
 
@@ -26,5 +26,5 @@ public class NewEnemyMover : MonoBehaviour
             }
             yield return new WaitForSeconds(moveDelay);
         }
-    }
+    } */
 }
