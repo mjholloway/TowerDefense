@@ -209,6 +209,7 @@ GameObject:
   - component: {fileID: 117660050}
   - component: {fileID: 117660051}
   - component: {fileID: 117660052}
+  - component: {fileID: 117660053}
   m_Layer: 5
   m_Name: Hand
   m_TagString: Untagged
@@ -265,6 +266,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dfc8d27403398b43a18e9c54a0e3888, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &117660053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117660049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8535faf9cafa4a5695954175b2e23d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cursorTexture: {fileID: 2800000, guid: c8953ebcc8cd34c71b0886f1fd6f88f1, type: 3}
 --- !u!1 &121550796
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,13 +20,16 @@ public class CardMover : MonoBehaviour
 
     /* This function also calls the AdjustCard coroutine but is called any time the cards are moving (except for when cards are being dealt).
     It will stop any previous coroutines and call for other cards to be shifted. */
-    public Coroutine MoveCard(RectTransform card, Vector3 targetRot, Vector2 targetPos, Vector3 targetScale, float speed, float duration)
+    public Coroutine MoveCard(RectTransform card, Vector3 targetRot, Vector2 targetPos, Vector3 targetScale, float speed, float duration, bool shift = true)
     {
         if (coroutine != null)
         {
             StopAllCoroutines();
         }
-        ShiftOtherCards(card, card.GetComponent<CardHandler>().isMagnified);
+        if (shift)
+        {
+            ShiftOtherCards(card, card.GetComponent<CardHandler>().isMagnified);
+        }
         return coroutine = StartCoroutine(AdjustCard(card, targetRot, targetPos, targetScale, speed, duration));
     }
 

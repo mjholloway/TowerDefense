@@ -52,7 +52,7 @@ public class HandManager : MonoBehaviour
         for (; currentHandSize <= targetHandSize; currentHandSize++)
         {
             float handWidth = CalcHandWidth(currentHandSize);
-            GetComponent<RectTransform>().sizeDelta = new Vector2(handWidth, 420);
+            GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width, 420);
             for (int cardNum = 0; cardNum < currentHandSize; cardNum++)
             {
                 RectTransform card = hand[cardNum];
@@ -172,7 +172,7 @@ public class HandManager : MonoBehaviour
     // card based on its placement in the hand list by calling the previous calculation functions in this class.
     public RectTransform GetShiftValues(int currentIndex, out Vector3 rotation, out Vector2 position)
     {
-        float handWidth = handObject.rect.width;
+        float handWidth = CalcHandWidth(cardsInHand);
         
         position = new Vector2(CalcPosition(currentIndex, handWidth), CalcDisplacement(cardsInHand, currentIndex));
         rotation = GetRotation(cardsInHand, currentIndex, position);
