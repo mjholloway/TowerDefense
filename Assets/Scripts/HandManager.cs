@@ -52,7 +52,6 @@ public class HandManager : MonoBehaviour
         for (; currentHandSize <= targetHandSize; currentHandSize++)
         {
             float handWidth = CalcHandWidth(currentHandSize);
-            GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width, 420);
             for (int cardNum = 0; cardNum < currentHandSize; cardNum++)
             {
                 RectTransform card = hand[cardNum];
@@ -185,6 +184,5 @@ public class HandManager : MonoBehaviour
     {
         hand.Remove(card);
         cardsInHand--;
-        GetComponent<RectTransform>().sizeDelta = new Vector2(CalcHandWidth(cardsInHand), 420);
     }
 }

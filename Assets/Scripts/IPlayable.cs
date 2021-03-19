@@ -6,4 +6,5 @@ public interface IPlayable
 {
     bool targets { get; set; }
 
+    void PlayCard();
 }

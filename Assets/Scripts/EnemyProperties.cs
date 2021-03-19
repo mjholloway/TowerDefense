@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class EnemyProperties : MonoBehaviour
+public class EnemyProperties : MonoBehaviour, IDamageable
 {
-    public int hitsLeft = 5;
     public int waypointIndex = 0;
+    public int currentHealth { get; set; } = 10;
+    public int maxHealth { get; set; } = 10;
 
     [SerializeField] ParticleSystem hitParticles;
     [SerializeField] ParticleSystem deathParticlePrefab;
@@ -18,13 +19,15 @@ public class EnemyProperties : MonoBehaviour
     //[SerializeField] AudioClip reachedGoalSfx;
 
     EnemySpawner enemies;
+    HealthBarManager healthBar;
 
     private void Start()
     {
         enemies = GetComponentInParent<EnemySpawner>();
+        healthBar = GetComponentInChildren<HealthBarManager>();
     }
 
-    // Function to deal with taking hits from the turrets.
+    /* Function to deal with taking hits from the turrets.
     private void OnCollisionEnter(Collision collision)
     {
         hitParticles.Play();
@@ -37,7 +40,7 @@ public class EnemyProperties : MonoBehaviour
         }
 
         Destroy(collision.collider.gameObject);
-    }
+    } */
 
     // When the enemy runs out of health this will clean it up and remove it.
     public void ProcessEnemyDeath()
@@ -98,5 +101,12 @@ public class EnemyProperties : MonoBehaviour
         enemies.deadEnemies++;
         //Destroy(goalFx.gameObject, goalFx.main.duration);
         Destroy(gameObject);
+    }
+
+    public void ModifyHealth(int change)
+    {
+        int previousHealth = currentHealth;
+        currentHealth += change;
+        healthBar.ModifyHealthBar(previousHealth, currentHealth, maxHealth);
     }
 }

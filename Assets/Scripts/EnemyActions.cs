@@ -62,12 +62,12 @@ public class EnemyActions : MonoBehaviour
             Vector3.Distance(enemy.transform.position, closestTower.transform.position))
         {
             // The tower with the lowest health will be targeted.
-            if (tower.GetComponent<NewTower>().towerHealth < closestTower.GetComponent<NewTower>().towerHealth)
+            if (tower.GetComponent<NewTower>().currentHealth < closestTower.GetComponent<NewTower>().currentHealth)
             {
                 closestTower = tower;
             }
             // If the towers have the same health, one will randomly be chosen.
-            else if (tower.GetComponent<NewTower>().towerHealth == closestTower.GetComponent<NewTower>().towerHealth)
+            else if (tower.GetComponent<NewTower>().currentHealth == closestTower.GetComponent<NewTower>().currentHealth)
             {
                 int rand = Random.Range(1, 3);
                 if (rand == 1)

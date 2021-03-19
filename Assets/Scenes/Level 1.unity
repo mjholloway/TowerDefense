@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.28953996, g: 0.39766443, b: 0.5883722, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -234,7 +234,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -130}
-  m_SizeDelta: {x: 0, y: 380}
+  m_SizeDelta: {x: 1920, y: 420}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &117660051
 MonoBehaviour:
@@ -3419,6 +3419,7 @@ GameObject:
   - component: {fileID: 1153780704}
   - component: {fileID: 1153780707}
   - component: {fileID: 1153780703}
+  - component: {fileID: 1153780706}
   m_Layer: 5
   m_Name: Cards
   m_TagString: Untagged
@@ -3504,6 +3505,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1153780701}
   m_CullTransparentMesh: 0
+--- !u!114 &1153780706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153780701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e83c35470d84408cadab7aa18f075c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!223 &1153780707
 Canvas:
   m_ObjectHideFlags: 0

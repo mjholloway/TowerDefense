@@ -32,7 +32,7 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     GameObject discard;
     IPlayable playable;
     bool targets;
-    int frames;
+    int frames = 0;
     bool centered = false;
 
 
@@ -52,23 +52,33 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             }
             else
             {
-                if (FindMousePos())
-                {
-                    hand.GetComponent<CardMover>().StopCard(thisCardCoroutine);
-                    transform.position = Input.mousePosition;
-                    centered = false;
-                }
-                else if(!centered)
-                {
-                    CenterCard();
-                }
-                if (Input.GetMouseButtonDown(0) && frames != Time.frameCount)
-                {
-                    PlayOrReturnCard();
-                }
+                EnterTargetingMode();
+            }
+            if (Input.GetMouseButtonDown(0) && frames != Time.frameCount)
+            {
+                PlayOrReturnCard();
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                ReturnCard();
             }
         }
 
+    }
+
+    private void EnterTargetingMode()
+    {
+        if (FindMousePos())
+        {
+            hand.GetComponent<CardMover>().StopCard(thisCardCoroutine);
+            transform.position = Input.mousePosition;
+            centered = false;
+        }
+        else if (!centered)
+        {
+            CenterCard();
+        }
+        
     }
 
     // This is called in HandManager when the card is dealt to store its position and rotation and index, as well as when cards are played/discarded.
@@ -126,8 +136,6 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void PlayOrReturnCard()
     {
-        centered = false;
-        transform.parent.GetComponent<CursorChanger>().ResetCursor();
         bool inHandArea = FindMousePos();
         if (inHandArea)
         {
@@ -150,19 +158,26 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void ReturnCard()
     {
-        isSelected = false;
-        isSelectable = true;
+        DeselectCard();
         Demagnify();
     }
 
     private void PlayCard()
     {
-        isMagnified = false;
-        isSelected = false;
-        isSelectable = true;
+        playable.PlayCard();
+        DeselectCard();
         isInHand = false;
         hand.GetComponent<HandManager>().RemoveCard(rectTransform);
         discard.GetComponent<DiscardManager>().DiscardCard(rectTransform);
+    }
+
+    private void DeselectCard()
+    {
+        transform.parent.GetComponent<CursorChanger>().ResetCursor();
+        centered = false;
+        isMagnified = false;
+        isSelected = false;
+        isSelectable = true;
     }
 
     private void CenterCard()

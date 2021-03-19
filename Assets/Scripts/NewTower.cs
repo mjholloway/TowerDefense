@@ -3,16 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewTower : MonoBehaviour
+public class NewTower : MonoBehaviour, IDamageable
 {
-    public int towerHealth = 50;
+    public int currentHealth { get; set; } = 50;
+    public int maxHealth { get; set; } = 50;
 
     [SerializeField] HealthBarManager healthBar;
 
     public void ModifyHealth(int change)
     {
-        towerHealth += change;
-        healthBar.ModifyHealthBar(towerHealth, 50);
+        int previousHealth = currentHealth;
+        currentHealth += change;
+        healthBar.ModifyHealthBar(previousHealth, currentHealth, maxHealth);
     }
 
     private void Update()
