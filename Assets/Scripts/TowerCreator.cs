@@ -11,6 +11,7 @@ public class TowerCreator : MonoBehaviour
 
     [SerializeField] GameObject towerPrefab;
     [SerializeField] PlayerHealth player;
+    [SerializeField] CardActions cardActions;
 
     private void Update()
     {
@@ -26,6 +27,7 @@ public class TowerCreator : MonoBehaviour
         Vector3 mouseVector = new Vector3(Input.mousePosition.x, 10, Input.mousePosition.y);
         tower = Instantiate(towerPrefab, mouseVector, Quaternion.identity);
         towerList.Add(tower);
+        cardActions.SetTower(tower);
     }
 
     public void ClearTower()

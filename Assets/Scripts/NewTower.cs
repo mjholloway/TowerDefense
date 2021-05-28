@@ -26,4 +26,14 @@ public class NewTower : MonoBehaviour, IDamageable
         }
     }
 
+    public void Attack(EnemyProperties enemy)
+    {
+        transform.LookAt(enemy.transform);
+        ShootEnemy();
+    }
+
+    private void ShootEnemy()
+    {
+        
+    }
 }

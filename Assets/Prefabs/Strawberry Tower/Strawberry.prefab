@@ -110,7 +110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18a9b1a380318478f9110a9a594193dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towerHealth: 50
   healthBar: {fileID: 3075479258632273162}
 --- !u!1001 &1975153601960022683
 PrefabInstance:
@@ -405,6 +404,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Range
+      objectReference: {fileID: 0}
+    - target: {fileID: 2232035121033570213, guid: 0040c8a5b52c07247af406f683f0485a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0040c8a5b52c07247af406f683f0485a, type: 3}

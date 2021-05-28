@@ -4383,6 +4383,7 @@ MonoBehaviour:
   towerPrefab: {fileID: 3634200655744318916, guid: 772d20ccf5bbe1c4fa19a558da91713e,
     type: 3}
   player: {fileID: 857419123}
+  cardActions: {fileID: 1153780706}
 --- !u!1001 &1466998493
 PrefabInstance:
   m_ObjectHideFlags: 0
