@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
+/*
 public enum shotOptions
 {
     First = 0,
@@ -171,7 +172,7 @@ public class Tower : MonoBehaviour
          Note that for the purposes of calculation the x and z coordinates represent the y and x coordinates respectively. Sin is used for x, and Cos for z
          despite the fact that x would normally be calculated with cos and y would be calculated with sin. This is because the z axis in scene corresponds to
          the cartesian x axis while the x axis in scene corresponds to the cartesian y axis with respect to the gameobject orientation. */
-        float radius = 4f;
+        /*float radius = 4f;
         float angle = transform.Find("Strawberry Objects").rotation.eulerAngles.y * (Mathf.PI/180);
         float xCenter = transform.position.x;
         float zCenter = transform.position.z;
@@ -201,3 +202,5 @@ public class Tower : MonoBehaviour
         shootingFace.SetActive(false);
     }
 }
+        */
+

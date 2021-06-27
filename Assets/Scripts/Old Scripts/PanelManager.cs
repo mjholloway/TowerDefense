@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+/*
 public class PanelManager : MonoBehaviour
 {
     public static PanelManager panel
@@ -87,4 +87,5 @@ public class PanelManager : MonoBehaviour
         }
     }
 }
+*/
     
