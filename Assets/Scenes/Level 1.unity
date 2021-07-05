@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.28953996, g: 0.39766443, b: 0.5883722, a: 1}
+  m_IndirectSpecularColor: {r: 0.28953958, g: 0.39766443, b: 0.588372, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -210,6 +210,8 @@ GameObject:
   - component: {fileID: 117660051}
   - component: {fileID: 117660052}
   - component: {fileID: 117660053}
+  - component: {fileID: 117660055}
+  - component: {fileID: 117660054}
   m_Layer: 5
   m_Name: Hand
   m_TagString: Untagged
@@ -254,6 +256,7 @@ MonoBehaviour:
   cardSpacing: 120
   lookAt: {fileID: 1999680170}
   verticalDisplacementMultiplier: 15
+  cardPointerEvent: {fileID: 117660054}
 --- !u!114 &117660052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,6 +282,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorTexture: {fileID: 2800000, guid: c8953ebcc8cd34c71b0886f1fd6f88f1, type: 3}
+--- !u!114 &117660054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117660049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88da9d81435672f46a69c3b582f6167f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointerEnterEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  pointerExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  isSelectable: 1
+--- !u!114 &117660055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117660049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 626da6ed484d3e6498cbe50bd616f9ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  verticalMagnificationDisplacement: 150
+  magnifyScaleFactor: 1.25
+  centerScaleFactor: 1.1
+  magnifyRotation: {x: 0, y: 0, z: 0}
+  centerPos: {x: 0, y: 100}
+  centerRotation: {x: 0, y: 0}
+  mover: {fileID: 117660052}
+  discard: {fileID: 1677849816}
+  handRect: {fileID: 117660050}
+  cardPointerEvent: {fileID: 117660054}
+  cursorChanger: {fileID: 117660053}
 --- !u!1 &121550796
 GameObject:
   m_ObjectHideFlags: 0
@@ -434,7 +479,6 @@ MonoBehaviour:
   enemyPrefab: {fileID: 4082678596817453127, guid: 3b8537165bcef9945b7aa74477c9d489,
     type: 3}
   spawnEnemySfx: {fileID: 8300000, guid: a9612514af535884fa4de2ff0b035022, type: 3}
-  player: {fileID: 857419123}
 --- !u!82 &122452653
 AudioSource:
   m_ObjectHideFlags: 0
@@ -981,6 +1025,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4776327020833869381, guid: d70f6e05e8af95f42882d39283f7169f,
         type: 3}
+      propertyPath: manager
+      value: 
+      objectReference: {fileID: 258593682}
+    - target: {fileID: 4776327020833869381, guid: d70f6e05e8af95f42882d39283f7169f,
+        type: 3}
       propertyPath: towerCreator
       value: 
       objectReference: {fileID: 1460579382}
@@ -1061,6 +1110,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4776327020833869381, guid: d70f6e05e8af95f42882d39283f7169f,
         type: 3}
+      propertyPath: manager
+      value: 
+      objectReference: {fileID: 258593682}
+    - target: {fileID: 4776327020833869381, guid: d70f6e05e8af95f42882d39283f7169f,
+        type: 3}
       propertyPath: towerCreator
       value: 
       objectReference: {fileID: 1460579382}
@@ -1081,8 +1135,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 258593681}
+  - component: {fileID: 258593682}
   m_Layer: 0
-  m_Name: Blocks
+  m_Name: Neutral Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1107,6 +1162,18 @@ Transform:
   m_Father: {fileID: 567230327}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &258593682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 258593680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecbbc9ec53a736a409de1d4c6fe4f586, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &263782216
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1174,6 +1241,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Neutral Block (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 4776327020833869381, guid: d70f6e05e8af95f42882d39283f7169f,
+        type: 3}
+      propertyPath: manager
+      value: 
+      objectReference: {fileID: 258593682}
     - target: {fileID: 4776327020833869381, guid: d70f6e05e8af95f42882d39283f7169f,
         type: 3}
       propertyPath: towerCreator
@@ -2775,6 +2847,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4776327020833869381, guid: d70f6e05e8af95f42882d39283f7169f,
         type: 3}
+      propertyPath: manager
+      value: 
+      objectReference: {fileID: 258593682}
+    - target: {fileID: 4776327020833869381, guid: d70f6e05e8af95f42882d39283f7169f,
+        type: 3}
       propertyPath: towerCreator
       value: 
       objectReference: {fileID: 1460579382}
@@ -3773,6 +3850,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4776327020833869381, guid: d70f6e05e8af95f42882d39283f7169f,
         type: 3}
+      propertyPath: manager
+      value: 
+      objectReference: {fileID: 258593682}
+    - target: {fileID: 4776327020833869381, guid: d70f6e05e8af95f42882d39283f7169f,
+        type: 3}
       propertyPath: towerCreator
       value: 
       objectReference: {fileID: 1460579382}
@@ -4384,6 +4466,7 @@ MonoBehaviour:
     type: 3}
   player: {fileID: 857419123}
   cardActions: {fileID: 1153780706}
+  blockManager: {fileID: 258593682}
 --- !u!1001 &1466998493
 PrefabInstance:
   m_ObjectHideFlags: 0

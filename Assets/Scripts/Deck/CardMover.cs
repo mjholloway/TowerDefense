@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using TowerDefense.Control;
 using UnityEngine;
 
 namespace TowerDefense.Deck
@@ -23,7 +21,7 @@ namespace TowerDefense.Deck
 
         /* This function also calls the AdjustCard coroutine but is called any time the cards are moving (except for when cards are being dealt).
         It will stop any previous coroutines and call for other cards to be shifted. */
-        public Coroutine MoveCard(RectTransform card, Vector3 targetRot, Vector2 targetPos, Vector3 targetScale, float speed, float duration, bool shift = true)
+        public Coroutine MoveCard(RectTransform card, Vector3 targetRot, Vector2 targetPos, Vector3 targetScale, float speed, float duration, bool isMagnified, bool shift = true)
         {
             if (coroutine != null)
             {
@@ -31,7 +29,7 @@ namespace TowerDefense.Deck
             }
             if (shift)
             {
-                ShiftOtherCards(card, card.GetComponent<CardHandler>().isMagnified);
+                ShiftOtherCards(card, isMagnified);
             }
             return coroutine = StartCoroutine(AdjustCard(card, targetRot, targetPos, targetScale, speed, duration));
         }
@@ -72,15 +70,16 @@ namespace TowerDefense.Deck
             Vector2 position;
             Vector3 scale = new Vector3(1, 1, 1);
             int cardIndex = hand.GetCardIndex(selectedCard);
-            CardHandler cardHandler = selectedCard.GetComponent<CardHandler>();
+            CardProperties cardProperties = selectedCard.GetComponent<CardProperties>();
 
             for (int i = 0; i < handSize; i++)
             {
                 if (cardIndex != i)
                 {
-                    RectTransform cardToMove = hand.GetShiftValues(i, out rotation, out position); // Returns the correct card based on the index and gives the
-                                                                                                   // position and rotation.
-                                                                                                   // If we are shifting the cards away the calculated position must be adjusted.
+                    // Returns the correct card based on the index and gives the position and rotation. If we are shifting
+                    // the cards away the calculated position must be adjusted.
+                    RectTransform cardToMove = hand.GetShiftValues(i, out rotation, out position); 
+
                     if (shiftAway)
                     {
                         if (i < cardIndex) { position.x -= 100; }
@@ -88,9 +87,9 @@ namespace TowerDefense.Deck
                     }
                     StartCoroutine(AdjustCard(cardToMove, rotation, position, scale, .1f, .5f));
 
-                    if (!cardHandler.isInHand) // If the cards are shifting due to a card being discarded, it will set the new positions of the cards.
+                    if (!cardProperties.isInHand) // If the cards are shifting due to a card being discarded, it will set the new positions of the cards.
                     {
-                        cardToMove.GetComponent<CardHandler>().SetProperties(Quaternion.Euler(rotation), position, i);
+                        cardToMove.GetComponent<CardProperties>().SetProperties(Quaternion.Euler(rotation), position, i);
                     }
                 }
             }

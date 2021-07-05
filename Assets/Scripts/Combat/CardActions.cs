@@ -22,6 +22,7 @@ namespace TowerDefense.Combat
             {
                 if (hit.collider.TryGetComponent(out EnemyProperties enemy))
                 {
+                    if (tower == null) { Debug.Log("You don't have any towers to fire!"); }
                     tower.GetComponent<NewTower>().Attack(enemy);
                     enemy.ModifyHealth(damage);
                 }

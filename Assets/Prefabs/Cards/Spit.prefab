@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 2989395326941611345}
   - component: {fileID: 2898274601505053289}
   - component: {fileID: 4517609738474334037}
-  - component: {fileID: 5884904225427473373}
   - component: {fileID: 8658014353492109767}
+  - component: {fileID: 2827317545513214080}
   m_Layer: 5
   m_Name: Spit
   m_TagString: Untagged
@@ -74,26 +74,6 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &5884904225427473373
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2959798604394342578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 626da6ed484d3e6498cbe50bd616f9ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isMagnified: 0
-  isInHand: 0
-  verticalMagnificationDisplacement: 150
-  magnifyScaleFactor: 1.25
-  centerScaleFactor: 1.1
-  magnifyRotation: {x: 0, y: 0, z: 0}
-  centerPos: {x: 0, y: 50}
-  centerRotation: {x: 0, y: 0}
 --- !u!114 &8658014353492109767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,3 +86,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 786f154c0e24c49f38c0a4d9f50daa77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2827317545513214080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2959798604394342578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88a74abdc383be14a8c53b03550c8057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isMagnified: 0
+  isInHand: 0
+  centered: 0

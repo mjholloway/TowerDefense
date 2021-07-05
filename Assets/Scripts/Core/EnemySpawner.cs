@@ -30,9 +30,8 @@ namespace TowerDefense.Core
             {
                 yield return new WaitForSeconds(secondsBetweenSpawn);
                 GetComponent<AudioSource>().PlayOneShot(spawnEnemySfx);
-                var newEnemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
+                var newEnemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity, gameObject.transform);
                 enemies.Add(newEnemy);
-                newEnemy.transform.parent = gameObject.transform;
                 enemyCount++;
 
             }

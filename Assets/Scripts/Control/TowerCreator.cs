@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TowerDefense.Attributes;
 using TowerDefense.Combat;
 using TowerDefense.Core;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace TowerDefense.Control
 {
@@ -17,6 +15,17 @@ namespace TowerDefense.Control
         [SerializeField] GameObject towerPrefab;
         [SerializeField] PlayerHealth player;
         [SerializeField] CardActions cardActions;
+        [SerializeField] NeutralBlockManager blockManager;
+
+        private void OnEnable()
+        {
+            blockManager.onTowerPlacement += PlaceTower;
+        }
+
+        private void OnDisable()
+        {
+            blockManager.onTowerPlacement -= PlaceTower;
+        }
 
         private void Update()
         {
@@ -32,14 +41,16 @@ namespace TowerDefense.Control
             Vector3 mouseVector = new Vector3(Input.mousePosition.x, 10, Input.mousePosition.y);
             tower = Instantiate(towerPrefab, mouseVector, Quaternion.identity);
             towerList.Add(tower);
+            blockManager.SetTowerToPlace(tower);
             cardActions.SetTower(tower);
         }
 
-        public void ClearTower()
+        public void PlaceTower()
         {
             tower.GetComponent<UnplacedTower>().ActivateTower(gameObject);
             holdingTower = false;
             tower = null;
+            blockManager.SetTowerToPlace(null);
         }
     }
 }

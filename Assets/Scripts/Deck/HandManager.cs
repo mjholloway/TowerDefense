@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TowerDefense.Control;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +14,7 @@ namespace TowerDefense.Deck
         [SerializeField] float cardSpacing = 90f;
         [SerializeField] RectTransform lookAt;
         [SerializeField] float verticalDisplacementMultiplier = 15f;
+        [SerializeField] CardPointerEvent cardPointerEvent; 
 
         RectTransform handObject;
         Queue<RawImage> deck;
@@ -35,7 +34,7 @@ namespace TowerDefense.Deck
 
         private IEnumerator DealHand(int cardsToDeal)
         {
-            CardHandler.isSelectable = false;
+            cardPointerEvent.isSelectable = false;
 
             int targetHandSize = cardsInHand + cardsToDeal;
             int currentHandSize = cardsInHand;
@@ -58,18 +57,18 @@ namespace TowerDefense.Deck
                 for (int cardNum = 0; cardNum < currentHandSize; cardNum++)
                 {
                     RectTransform card = hand[cardNum];
-                    CardHandler cardHandler = card.GetComponent<CardHandler>();
+                    CardProperties cardProperties = card.GetComponent<CardProperties>();
                     Vector2 position = new Vector2(CalcPosition(cardNum, handWidth), CalcDisplacement(currentHandSize, cardNum));
                     Vector3 rotation = GetRotation(currentHandSize, cardNum, position);
-                    cardHandler.SetProperties(Quaternion.Euler(rotation), position, cardNum);
-                    cardHandler.SetParents(deckObject, gameObject, discardObject);
+                    cardProperties.SetProperties(Quaternion.Euler(rotation), position, cardNum);
+                    cardProperties.SetParents(deckObject, gameObject, discardObject);
                     coroutine = cardMover.DealCard(card, rotation, position, new Vector3(1, 1, 1), .1f, .3f);
                 }
                 yield return coroutine;
             }
 
             cardsInHand = currentHandSize - 1;
-            CardHandler.isSelectable = true;
+            cardPointerEvent.isSelectable = true;
         }
 
         // Calculates the width of the hand based on how many cards are in the hand and the width of the cards, but subtracts the overlap of the cards.
@@ -183,10 +182,11 @@ namespace TowerDefense.Deck
         }
 
         // Used when a card is removed from hand, will remove it from the hand list, augment cardsinhand variable, and alter the size of the handobject.
-        public void RemoveCard(RectTransform card)
+        public void RemoveCard(CardProperties card)
         {
-            hand.Remove(card);
+            hand.Remove(card.GetRectTransform());
             cardsInHand--;
+            print(hand.Count);
         }
     }
 }

@@ -1,146 +1,130 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using System;
-using UnityEngine.Events;
-using UnityEngine.UIElements;
-using TowerDefense.Deck;
 using TowerDefense.Core;
+using TowerDefense.Deck;
 
 namespace TowerDefense.Control
 {
-    public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
+    public class CardHandler : MonoBehaviour
     {
-        public static bool isSelectable = true;
-        public bool isMagnified = false;
-        public bool isInHand = false;
-
         [SerializeField] float verticalMagnificationDisplacement = 150f;
         [SerializeField] float magnifyScaleFactor = 1.25f;
         [SerializeField] float centerScaleFactor = 1.1f;
+
         [SerializeField] Vector3 magnifyRotation = new Vector3(0, 0, 0);
         [SerializeField] Vector2 centerPos = new Vector2(0f, 100f);
         [SerializeField] Vector2 centerRotation = new Vector3(0, 0, 0);
 
-        RectTransform rectTransform;
-        Quaternion startRotation;
-        Vector2 startPosition;
-        Vector3 startScale = new Vector3(1f, 1f, 1f);
-        int startIndex;
-        bool isSelected = false;
-        Coroutine thisCardCoroutine;
-        GameObject deck;
-        GameObject hand;
-        GameObject discard;
-        IPlayable playable;
-        bool targets;
+        [SerializeField] CardMover mover;
+        [SerializeField] DiscardManager discard;
+        [SerializeField] RectTransform handRect;
+        [SerializeField] CardPointerEvent cardPointerEvent;
+        [SerializeField] CursorChanger cursorChanger;
+
         int frames = 0;
-        bool centered = false;
+        Coroutine thisCardCoroutine;
 
+        CardProperties magnifiedCard;
+        CardProperties selectedCard;
 
-        private void Start()
+        bool selectedCardTargets = false;
+
+        private void OnEnable()
         {
-            rectTransform = GetComponent<RectTransform>();
-            playable = GetComponent<IPlayable>();
+            cardPointerEvent.pointerEnterEvent.AddListener(HandlePointerEnterEvent);
+            cardPointerEvent.pointerExitEvent.AddListener(HandlePointerExitEvent);
+        }
+
+        private void OnDisable()
+        {
+            cardPointerEvent.pointerEnterEvent.RemoveListener(HandlePointerEnterEvent);
+            cardPointerEvent.pointerExitEvent.RemoveListener(HandlePointerExitEvent);
+        }
+
+        void HandlePointerEnterEvent(CardProperties card)
+        {
+            if (!card.isMagnified) { MagnifyCard(card); }
+        }
+
+        void HandlePointerExitEvent(CardProperties card)
+        {
+            if (magnifiedCard != null) { DemagnifyCard(card); }
+        }
+
+        // Calls CardMover to magnify the hovered card to target position and move others away.
+        private void MagnifyCard(CardProperties card)
+        {
+            magnifiedCard = card;
+            card.isMagnified = true;
+            RectTransform cardRectTransform = card.GetRectTransform();
+
+            cardRectTransform.SetAsLastSibling();
+
+            Vector2 magnifyPos = new Vector2(card.GetStartPosition().x, verticalMagnificationDisplacement);
+            Vector3 magnifyScale = new Vector3(magnifyScaleFactor, magnifyScaleFactor, 1f);
+
+            thisCardCoroutine = mover.MoveCard(cardRectTransform, magnifyRotation, magnifyPos, magnifyScale, .1f, .5f, card.isMagnified);
+        }
+        
+        // Calls CardMover to reset the hand and sets the card to proper index in heirarchy.
+        private void DemagnifyCard(CardProperties card)
+        {
+            Reset();
+
+            card.isMagnified = false;
+            RectTransform cardRectTransform = card.GetRectTransform();
+
+            mover.MoveCard(cardRectTransform, card.GetStartRotation().eulerAngles, card.GetStartPosition(), 
+                card.GetStartScale(), .1f, .5f, card.isMagnified);
+
+            cardRectTransform.SetSiblingIndex(card.GetStartIndex());
         }
 
         private void Update()
         {
-            if (isSelected)     // Card will stay at mouse position after it is selected.
+            if (selectedCard != null) 
             {
-                if (!targets)
+                if (!selectedCardTargets)
                 {
-                    transform.position = Input.mousePosition;
+                    selectedCard.transform.position = Input.mousePosition;
                 }
-                else
-                {
-                    EnterTargetingMode();
-                }
+                else { UseTargetingMode(); }
+            }            
+
+            if (magnifiedCard != null)
+            {
                 if (Input.GetMouseButtonDown(0) && frames != Time.frameCount)
                 {
-                    PlayOrReturnCard();
+                    if (selectedCard != null)
+                    {
+                        PlayOrReturnCard();
+                    }
+
+                    else
+                    {
+                        mover.StopCard(thisCardCoroutine);
+
+                        if (magnifiedCard.GetComponent<IPlayable>().targets)
+                        {
+                            cursorChanger.SetCursor();
+                            frames = Time.frameCount;
+                            selectedCardTargets = true;
+                        }
+
+                        selectedCard = magnifiedCard;
+                        cardPointerEvent.isSelectable = false;
+                    }
                 }
-                else if (Input.GetMouseButtonDown(1))
+                else if (selectedCard != null && Input.GetMouseButtonDown(1))
                 {
                     ReturnCard();
                 }
             }
-
         }
-
-        private void EnterTargetingMode()
-        {
-            if (FindMousePos())
-            {
-                hand.GetComponent<CardMover>().StopCard(thisCardCoroutine);
-                transform.position = Input.mousePosition;
-                centered = false;
-            }
-            else if (!centered)
-            {
-                CenterCard();
-            }
-
-        }
-
-        // This is called in HandManager when the card is dealt to store its position and rotation and index, as well as when cards are played/discarded.
-        public void SetProperties(Quaternion rotationCalc, Vector2 positionCalc, int index)
-        {
-            startRotation = rotationCalc;
-            startPosition = positionCalc;
-            startIndex = index;
-            isInHand = true;
-            targets = playable.targets;
-        }
-
-        public void SetParents(GameObject deckObject, GameObject handObject, GameObject discardObject)
-        {
-            deck = deckObject;
-            hand = handObject;
-            discard = discardObject;
-        }
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            if (isSelectable && isInHand)
-            {
-                MagnifyCard();
-            }
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            if (isSelectable && isInHand)
-            {
-                Demagnify();
-            }
-        }
-
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            // Will return card to hand if clicked in hand area, otherwise will move card to discard (later will play card)
-            if (isSelected)
-            {
-                PlayOrReturnCard();
-            }
-            else if (isSelectable)
-            {
-                hand.GetComponent<CardMover>().StopCard(thisCardCoroutine); // This seems unnecessary but it prevents the "coroutine continue failure" from appearing
-                if (targets)
-                {
-                    transform.parent.GetComponent<CursorChanger>().SetCursor();
-                    frames = Time.frameCount;
-                }
-                isSelected = true;
-                isSelectable = false;
-            }
-        }
-
+        
         private void PlayOrReturnCard()
         {
-            bool inHandArea = FindMousePos();
+            bool inHandArea = IsMouseInHandArea();
             if (inHandArea)
             {
                 ReturnCard();
@@ -150,68 +134,56 @@ namespace TowerDefense.Control
                 PlayCard();
             }
         }
-
-        private bool FindMousePos()
+        
+        private bool IsMouseInHandArea()
         {
-            RectTransform handRect;
             Vector2 localPos;
-            handRect = hand.GetComponent<RectTransform>();
             RectTransformUtility.ScreenPointToLocalPointInRectangle(handRect, Input.mousePosition, null, out localPos);
             return handRect.rect.Contains(localPos);
         }
-
+        
         private void ReturnCard()
         {
-            DeselectCard();
-            Demagnify();
+            cursorChanger.ResetCursor();
+            DemagnifyCard(magnifiedCard);
         }
-
+        
         private void PlayCard()
         {
-            playable.PlayCard();
-            DeselectCard();
-            isInHand = false;
-            hand.GetComponent<HandManager>().RemoveCard(rectTransform);
-            discard.GetComponent<DiscardManager>().DiscardCard(rectTransform);
+            selectedCard.isInHand = false;
+            selectedCard.GetComponent<IPlayable>().PlayCard();
+            GetComponent<HandManager>().RemoveCard(selectedCard);
+            discard.DiscardCard(selectedCard);
+            Reset();
         }
 
-        private void DeselectCard()
+        private void UseTargetingMode()
         {
-            transform.parent.GetComponent<CursorChanger>().ResetCursor();
-            centered = false;
-            isMagnified = false;
-            isSelected = false;
-            isSelectable = true;
+            if (IsMouseInHandArea())
+            {
+                mover.StopCard(thisCardCoroutine);
+                selectedCard.transform.position = Input.mousePosition;
+                selectedCard.centered = false;
+            }
+            else if (!selectedCard.centered)
+            {
+                CenterCard();
+            }
         }
 
         private void CenterCard()
         {
-            centered = true;
+            selectedCard.centered = true;
             Vector3 centerScale = new Vector3(centerScaleFactor, centerScaleFactor, centerScaleFactor);
-            thisCardCoroutine = hand.GetComponent<CardMover>().MoveCard(rectTransform, centerRotation, centerPos, centerScale, .1f, .5f, false);
+            thisCardCoroutine = mover.MoveCard(selectedCard.GetRectTransform(), centerRotation, centerPos, centerScale, .1f, .5f, false);
         }
 
-        // Calls CardMover to magnify the hovered card to target position and move others away.
-        private void MagnifyCard()
+        private void Reset()
         {
-            isMagnified = true;
-
-            rectTransform.SetAsLastSibling();
-
-            Vector2 magnifyPos = new Vector2(startPosition.x, verticalMagnificationDisplacement);
-            Vector3 magnifyScale = new Vector3(magnifyScaleFactor, magnifyScaleFactor, 1f);
-
-            thisCardCoroutine = hand.GetComponent<CardMover>().MoveCard(rectTransform, magnifyRotation, magnifyPos, magnifyScale, .1f, .5f);
+            selectedCard = null;
+            magnifiedCard = null;
+            cardPointerEvent.isSelectable = true;
+            cursorChanger.ResetCursor();
         }
-
-        // Calls CardMover to reset the hand and sets the card to proper index in heirarchy.
-        private void Demagnify()
-        {
-            isMagnified = false;
-
-            hand.GetComponent<CardMover>().MoveCard(rectTransform, startRotation.eulerAngles, startPosition, startScale, .1f, .5f);
-            rectTransform.SetSiblingIndex(startIndex);
-        }
-
     }
 }

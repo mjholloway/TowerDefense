@@ -18,6 +18,7 @@ namespace TowerDefense.Control
         {
             enemies = GetComponentInParent<EnemySpawner>();
             actions = GetComponentInParent<EnemyActions>();
+            properties = GetComponent<EnemyProperties>();
         }
 
         private void OnEnable()

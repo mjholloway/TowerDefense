@@ -1,32 +1,42 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using TowerDefense.Control;
 using UnityEngine;
 
 namespace TowerDefense.Core
 {
     public class NeutralBlock : MonoBehaviour
     {
-        public bool hasTower = false;
+        [SerializeField] NeutralBlockManager manager;
 
-        //[SerializeField] TowerFactory factory;
-        [SerializeField] TowerCreator towerCreator;
+        GameObject towerToPlace = null;
+        bool hasTower = false;
 
         private void OnMouseOver()
         {
-            if (towerCreator.holdingTower && !hasTower)
-            {
-                towerCreator.tower.GetComponent<UnplacedTower>().SnapTower(gameObject);
+            if (hasTower) { return; }
+            towerToPlace = manager.GetTowerToPlace();
 
-                if (Input.GetMouseButtonDown(0))
-                {
-                    //factory.AddTower(this);
-                    hasTower = true;
-                    AddRoots();
-                    towerCreator.ClearTower();
-                }
+            if (towerToPlace == null) { return; }
+            towerToPlace.GetComponent<UnplacedTower>().SnapTower(gameObject);
+            if (Input.GetMouseButtonDown(0))
+            {
+                hasTower = true;
+                AddRoots();
+                manager.onTowerPlacement.Invoke();
             }
+            //if (towerCreator.holdingTower && !hasTower)
+            //{
+            //    towerCreator.tower.GetComponent<UnplacedTower>().SnapTower(gameObject);
+
+            //    if (Input.GetMouseButtonDown(0))
+            //    {
+            //        //factory.AddTower(this);
+            //        hasTower = true;
+            //        AddRoots();
+            //        towerCreator.ClearTower();
+            //    }
+            //}
         }
 
         private void AddRoots()
@@ -40,10 +50,9 @@ namespace TowerDefense.Core
 
         private void OnMouseExit()
         {
-            if (towerCreator.holdingTower)
-            {
-                towerCreator.tower.GetComponent<UnplacedTower>().UnSnapTower();
-            }
+            if (hasTower || towerToPlace == null) { return; }
+
+            towerToPlace.GetComponent<UnplacedTower>().UnSnapTower();
         }
     }
 }
