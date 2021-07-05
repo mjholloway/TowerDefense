@@ -1,6 +1,7 @@
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using TowerDefense.Deck.Cards;
+using TowerDefense.Combat;
 
 namespace TowerDefense.Deck
 {
@@ -10,22 +11,22 @@ namespace TowerDefense.Deck
         public bool isInHand = false;
         public bool centered = false;
 
+        [SerializeField] Card thisCard;
+
         RectTransform rectTransform;
         GameObject deck;
         GameObject hand;
         GameObject discard;
-        IPlayable playable;
         CardPointerEvent cardPointerEvent;
 
         Quaternion startRotation;
         Vector2 startPosition;
         Vector3 startScale = new Vector3(1f, 1f, 1f);
-        int startIndex;       
- 
+        int startIndex;
+
         private void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
-            playable = GetComponent<IPlayable>();
         }
 
         // This is called in HandManager when the card is dealt to store its position and rotation and index,
@@ -85,6 +86,16 @@ namespace TowerDefense.Deck
         public Vector3 GetStartScale()
         {
             return startScale;
+        }
+
+        public bool Targets()
+        {
+            return thisCard.targets;
+        }
+
+        public void PlayCard(CardActions cardActions)
+        {
+            thisCard.PlayCard(cardActions);
         }
     }
 }

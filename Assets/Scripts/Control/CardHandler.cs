@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
 using TowerDefense.Core;
 using TowerDefense.Deck;
+using TowerDefense.Combat;
 
 namespace TowerDefense.Control
 {
@@ -20,6 +20,7 @@ namespace TowerDefense.Control
         [SerializeField] RectTransform handRect;
         [SerializeField] CardPointerEvent cardPointerEvent;
         [SerializeField] CursorChanger cursorChanger;
+        [SerializeField] CardActions cardActions;
 
         int frames = 0;
         Coroutine thisCardCoroutine;
@@ -104,12 +105,13 @@ namespace TowerDefense.Control
                     {
                         mover.StopCard(thisCardCoroutine);
 
-                        if (magnifiedCard.GetComponent<IPlayable>().targets)
+                        if (magnifiedCard.Targets())
                         {
                             cursorChanger.SetCursor();
                             frames = Time.frameCount;
                             selectedCardTargets = true;
                         }
+                        else { selectedCardTargets = false; }
 
                         selectedCard = magnifiedCard;
                         cardPointerEvent.isSelectable = false;
@@ -151,7 +153,7 @@ namespace TowerDefense.Control
         private void PlayCard()
         {
             selectedCard.isInHand = false;
-            selectedCard.GetComponent<IPlayable>().PlayCard();
+            selectedCard.PlayCard(cardActions);
             GetComponent<HandManager>().RemoveCard(selectedCard);
             discard.DiscardCard(selectedCard);
             Reset();

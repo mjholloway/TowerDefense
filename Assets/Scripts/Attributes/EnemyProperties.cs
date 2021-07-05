@@ -22,7 +22,7 @@ namespace TowerDefense.Attributes
         public void ModifyHealth(int change)
         {
             int previousHealth = currentHealth;
-            currentHealth += change;
+            currentHealth -= change;
             if (currentHealth < 0)
             {
                 Die();

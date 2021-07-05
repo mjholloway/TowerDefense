@@ -324,6 +324,7 @@ MonoBehaviour:
   handRect: {fileID: 117660050}
   cardPointerEvent: {fileID: 117660054}
   cursorChanger: {fileID: 117660053}
+  cardActions: {fileID: 1153780706}
 --- !u!1 &121550796
 GameObject:
   m_ObjectHideFlags: 0

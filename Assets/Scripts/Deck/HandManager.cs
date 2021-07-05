@@ -186,7 +186,6 @@ namespace TowerDefense.Deck
         {
             hand.Remove(card.GetRectTransform());
             cardsInHand--;
-            print(hand.Count);
         }
     }
 }
