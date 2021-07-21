@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5558763280291873369}
   - component: {fileID: 4014623941694604222}
   - component: {fileID: 4016739314797806852}
-  - component: {fileID: 8519520288127045827}
   - component: {fileID: 2835881246613879879}
   m_Layer: 0
   m_Name: Spoon Enemy
@@ -66,11 +65,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4531ad794497f3a49aac73b22250fbc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waypointIndex: 0
-  hitParticles: {fileID: 8082365979136247183}
-  deathParticlePrefab: {fileID: 198537984209914932, guid: 1a51bfda454239a41afb7dee687c6ac0,
-    type: 3}
-  moneyValue: 25
 --- !u!65 &4016739314797806852
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -84,18 +78,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.03, y: 9.57, z: 2.36}
   m_Center: {x: 0, y: 5, z: -0.09}
---- !u!114 &8519520288127045827
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4082678596817453127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bf7dc1e8aa8b4ea9856b28c46129d60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2835881246613879879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,11 +90,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a36618971e6c94297b0a14d470294c67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waypointIndex: 0
   hitParticles: {fileID: 198801791596541968, guid: dcf9cd10c07cf0c49863969befadb243,
     type: 3}
   deathParticlePrefab: {fileID: 198537984209914932, guid: 1a51bfda454239a41afb7dee687c6ac0,
     type: 3}
+  properties: {fileID: 4014623941694604222}
+  enemyIntent: {fileID: 11400000, guid: fba26e3e181e8bb49b73b1edb324b93c, type: 2}
 --- !u!1001 &1222691997429833118
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -358,12 +341,6 @@ PrefabInstance:
 --- !u!4 &8279568759292683341 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4208721479801298, guid: dcf9cd10c07cf0c49863969befadb243,
-    type: 3}
-  m_PrefabInstance: {fileID: 8279898856734129567}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &8082365979136247183 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198801791596541968, guid: dcf9cd10c07cf0c49863969befadb243,
     type: 3}
   m_PrefabInstance: {fileID: 8279898856734129567}
   m_PrefabAsset: {fileID: 0}

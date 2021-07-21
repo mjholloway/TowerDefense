@@ -34,6 +34,12 @@ namespace TowerDefense.Attributes
         {
             return Pathfinder.path[waypointIndex + 1].transform.position - Pathfinder.path[waypointIndex].transform.position;
         }
+
+        public void IncrementWaypoint()
+        {
+            waypointIndex++;
+        }
+
         public int GetWaypointIndex()
         {
             return waypointIndex;
@@ -41,7 +47,6 @@ namespace TowerDefense.Attributes
 
         public bool WillReachGoal()
         {
-            waypointIndex++;
             return waypointIndex + 1 == Pathfinder.path.Count - 1;
         }
 

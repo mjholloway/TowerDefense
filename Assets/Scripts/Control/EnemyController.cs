@@ -2,6 +2,7 @@
 using TowerDefense.Core;
 using TowerDefense.Attributes;
 using TowerDefense.Combat;
+using TowerDefense.Combat.Enemies;
 
 namespace TowerDefense.Control
 {
@@ -9,16 +10,16 @@ namespace TowerDefense.Control
     {
         [SerializeField] ParticleSystem hitParticles;
         [SerializeField] ParticleSystem deathParticlePrefab;
+        [SerializeField] EnemyProperties properties;
+        [SerializeField] EnemyIntents enemyIntent;
 
         EnemySpawner enemies;
-        EnemyProperties properties;
         EnemyActions actions;
 
         private void Awake()
         {
             enemies = GetComponentInParent<EnemySpawner>();
             actions = GetComponentInParent<EnemyActions>();
-            properties = GetComponent<EnemyProperties>();
         }
 
         private void OnEnable()
@@ -37,7 +38,7 @@ namespace TowerDefense.Control
         {
             if (Input.GetKeyDown(KeyCode.T))
             {
-                StartCoroutine(GetComponent<IActionable>().GetIntent());
+                StartCoroutine(enemyIntent.GetIntent(properties, actions));
             }
         }
 

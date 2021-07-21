@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa22d7bd1d9943e47a5c73b3165415f3, type: 3}
+  m_Name: SpoonEnemy
+  m_EditorClassIdentifier: 
+  enemyIntents:
+  - actionTypes: 00000000
+    actionValues: 0a000000
+  - actionTypes: 0100000000000000
+    actionValues: 0100000005000000
+  - actionTypes: 01000000
+    actionValues: 02000000

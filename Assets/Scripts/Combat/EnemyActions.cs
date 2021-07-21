@@ -1,18 +1,23 @@
 using System.Collections;
-using System.Collections.Generic;
 using TowerDefense.Attributes;
-using TowerDefense.Control;
 using TowerDefense.Core;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace TowerDefense.Combat
 {
-    public class EnemyActions : MonoBehaviour
+    public enum EnemyActionTypes
     {
+        Attack,
+        Move
+    }
+
+    public class EnemyActions : MonoBehaviour
+    {     
         public UnityAction onReachedGoal;
 
         [SerializeField] float moveDelay = .5f;
+        [SerializeField] Transform towerParent;
 
         public Coroutine MoveEnemy(EnemyProperties enemy, int moveAmount)
         {
@@ -21,10 +26,9 @@ namespace TowerDefense.Combat
 
         public void AttackTower(EnemyProperties enemy, int attackDmg)
         {
-            GameObject closestTower;
-            List<GameObject> towerList = transform.parent.GetComponentInChildren<TowerCreator>().towerList;
-            closestTower = towerList[0];
-            foreach (GameObject tower in towerList)
+            Transform closestTower;
+            closestTower = towerParent.GetChild(0);
+            foreach (Transform tower in towerParent)
             {
                 if (tower == closestTower) { continue; }
 
@@ -40,9 +44,6 @@ namespace TowerDefense.Combat
             int spacesMoved = 0;
             while (spacesMoved < moveAmount)
             {
-                int waypointIndex = enemy.GetWaypointIndex();
-                enemy.transform.position = Pathfinder.path[waypointIndex + 1].transform.position;
-
                 if (enemy.WillReachGoal()) // If the enemy has reached the last block move it and end coroutine.
                 {
                     enemy.transform.position = Pathfinder.path[Pathfinder.path.Count - 1].transform.position;
@@ -51,6 +52,8 @@ namespace TowerDefense.Combat
                 }
                 else
                 {
+                    enemy.IncrementWaypoint();
+                    int waypointIndex = enemy.GetWaypointIndex();
                     enemy.transform.position = Pathfinder.path[waypointIndex].transform.position;
                     FaceForward(enemy);
                 }
@@ -59,17 +62,17 @@ namespace TowerDefense.Combat
             }
         }
 
-        private GameObject DetermineClosestTower(EnemyProperties enemy, GameObject closestTower, GameObject tower)
+        private Transform DetermineClosestTower(EnemyProperties enemy, Transform closestTower, Transform tower)
         {
             // The closest tower will be targeted.
             if (Vector3.Distance(enemy.transform.position, tower.transform.position) <
-                            Vector3.Distance(enemy.transform.position, closestTower.transform.position))
+                            Vector3.Distance(enemy.transform.position, closestTower.position))
             {
                 closestTower = tower;
             }
             // If the distance between two towers is the same, the tiebreaker is health.
             else if (Vector3.Distance(enemy.transform.position, tower.transform.position) ==
-                Vector3.Distance(enemy.transform.position, closestTower.transform.position))
+                Vector3.Distance(enemy.transform.position, closestTower.position))
             {
                 // The tower with the lowest health will be targeted.
                 if (tower.GetComponent<NewTower>().currentHealth < closestTower.GetComponent<NewTower>().currentHealth)
@@ -96,19 +99,19 @@ namespace TowerDefense.Combat
             var direction = enemy.GetDirection();
             if (direction.x > 0)
             {
-                transform.rotation = Quaternion.Euler(0, 0, 0);
+                enemy.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
             else if (direction.x < 0)
             {
-                transform.rotation = Quaternion.Euler(0, 180, 0);
+                enemy.transform.rotation = Quaternion.Euler(0, 180, 0);
             }
             else if (direction.z > 0)
             {
-                transform.rotation = Quaternion.Euler(0, -90, 0);
+                enemy.transform.rotation = Quaternion.Euler(0, -90, 0);
             }
             else if (direction.z < 0)
             {
-                transform.rotation = Quaternion.Euler(0, 90, 0);
+                enemy.transform.rotation = Quaternion.Euler(0, 90, 0);
             }
         }
     }
